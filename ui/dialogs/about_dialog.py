@@ -5,14 +5,17 @@ from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QTextEdit
 )
 from PySide6.QtCore import Qt
-from assets.icons import get_pixmap
+from assets.icons import get_app_pixmap, get_app_icon
 
 class AboutDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("About Tropical Downloader - 트로피컬 정보 & 라이선스")
-        self.setFixedSize(540, 480)
+        # Non-modal: user can interact with main window while this is open
+        self.setWindowModality(Qt.WindowModality.NonModal)
+        self.setWindowTitle("About Tropical Downloader")
+        self.setFixedSize(520, 460)
         self.init_ui()
+        self.setWindowIcon(get_app_icon())
 
     def init_ui(self):
         layout = QVBoxLayout(self)
@@ -24,20 +27,20 @@ class AboutDialog(QDialog):
         top_layout.setSpacing(14)
 
         logo_lbl = QLabel()
-        logo_lbl.setPixmap(get_pixmap("logo", 60, 60))
+        logo_lbl.setPixmap(get_app_pixmap(60, 60))
         top_layout.addWidget(logo_lbl)
 
         info_vbox = QVBoxLayout()
-        info_vbox.setSpacing(2)
+        info_vbox.setSpacing(4)
 
-        title_lbl = QLabel("Tropical Downloader (트로피컬)")
-        title_lbl.setStyleSheet("font-size: 18px; font-weight: 900; color: #0077B6;")
-        
-        ver_lbl = QLabel("버전: 2.0.0 (Frutiger Aero Y2K Edition)")
-        ver_lbl.setStyleSheet("font-size: 12px; color: #0096C7; font-weight: bold;")
+        title_lbl = QLabel("Tropical Downloader")
+        title_lbl.setStyleSheet("font-size: 18px; font-weight: 800; color: #0F172A;")
 
-        author_lbl = QLabel("오픈소스 다운로더 스튜디오 • Python 3 & PySide6")
-        author_lbl.setStyleSheet("font-size: 11px; color: #03045E;")
+        ver_lbl = QLabel("v2.0.0  •  Python 3 & PySide6")
+        ver_lbl.setStyleSheet("font-size: 12px; color: #475569; font-weight: 600;")
+
+        author_lbl = QLabel("오픈소스 미디어 다운로더")
+        author_lbl.setStyleSheet("font-size: 11px; color: #94A3B8;")
 
         info_vbox.addWidget(title_lbl)
         info_vbox.addWidget(ver_lbl)
@@ -50,7 +53,7 @@ class AboutDialog(QDialog):
         license_box = QTextEdit()
         license_box.setReadOnly(True)
         license_box.setHtml("""
-        <h3>🌴 트로피컬 다운로더 라이선스 고지</h3>
+        <h3>Tropical Downloader — 오픈소스 라이선스 고지</h3>
         <p>본 프로그램은 오픈소스 라이선스 규정을 철저히 준수합니다.</p>
         <hr/>
         <h4>1. PySide6 (Qt for Python)</h4>
@@ -65,7 +68,7 @@ class AboutDialog(QDialog):
         <p><b>라이선스:</b> GNU LGPL v2.1+ / GPL v2+</p>
         <p>미디어 변환 및 포맷 멀티플렉싱을 위해 시스템 FFmpeg 바이너리를 동적 호출합니다.</p>
         <hr/>
-        <p>Copyright &copy; 2026 Tropical Downloader Team. MIT License.</p>
+        <p>Copyright &copy; 2026 Tropical Downloader Contributors. MIT License.</p>
         """)
         layout.addWidget(license_box)
 

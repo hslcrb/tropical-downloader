@@ -158,8 +158,9 @@ class TropicalMainWindow(QMainWindow):
             self.status_bar.showMessage(f"다운로드 취소 요청됨: [{task_id}]")
 
     def on_open_about(self):
-        dlg = AboutDialog(self)
-        dlg.exec()
+        # Non-modal: main window stays interactive
+        self._about_dlg = AboutDialog(self)
+        self._about_dlg.show()
 
 def main():
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
