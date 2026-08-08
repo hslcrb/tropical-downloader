@@ -1,9 +1,41 @@
 """
-Tropical Downloader - Dynamic SVG Icon Provider (Frutiger Aero / Y2K Tropical Aesthetics)
+Tropical Downloader - Dynamic SVG & Native Icon Provider (Frutiger Aero / Y2K Tropical Aesthetics)
 """
+import os
 from PySide6.QtGui import QIcon, QPixmap, QPainter
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtCore import QByteArray, QSize, Qt
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ICO_PATH = os.path.join(BASE_DIR, "tropical-downloader.ico")
+PNG_PATH = os.path.join(BASE_DIR, "tropical-downloader.png")
+SVG_PATH = os.path.join(BASE_DIR, "tropical-downloader.svg")
+
+def get_app_icon() -> QIcon:
+    """Returns application QIcon from ICO, PNG, or SVG"""
+    if os.path.exists(ICO_PATH):
+        return QIcon(ICO_PATH)
+    elif os.path.exists(PNG_PATH):
+        return QIcon(PNG_PATH)
+    elif os.path.exists(SVG_PATH):
+        return QIcon(SVG_PATH)
+    return get_icon("logo")
+
+def get_app_pixmap(width: int = 64, height: int = 64) -> QPixmap:
+    """Returns high-res QPixmap of tropical-downloader logo"""
+    if os.path.exists(PNG_PATH):
+        pm = QPixmap(PNG_PATH)
+        return pm.scaled(width, height, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+    elif os.path.exists(SVG_PATH):
+        renderer = QSvgRenderer(SVG_PATH)
+        pixmap = QPixmap(QSize(width, height))
+        pixmap.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(pixmap)
+        renderer.render(painter)
+        painter.end()
+        return pixmap
+    return get_pixmap("logo", width, height)
+
 
 # SVG Icon Templates with vibrant gradients, glossy highlights, and crisp paths
 SVG_ICONS = {

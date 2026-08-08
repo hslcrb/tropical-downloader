@@ -9,10 +9,10 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QTabWidget, QStatusBar, QMessageBox
 )
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 
 from styles.tropical_theme import apply_theme
-from assets.icons import get_icon
+from assets.icons import get_icon, get_app_icon
 from ui.header import TropicalHeader
 from ui.tab_quick import QuickTab
 from ui.tab_inspector import InspectorTab
@@ -21,13 +21,14 @@ from ui.tab_advanced import AdvancedTab
 from ui.tab_queue import QueueTab
 from ui.tab_history import HistoryTab
 from ui.dialogs.about_dialog import AboutDialog
+from ui.splash import TropicalSplashScreen
 from core.yt_worker import DownloadWorker
 
 class TropicalMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Tropical Downloader - 트로피컬 아일랜드 Y2K 다운로더")
-        self.setWindowIcon(get_icon("logo", 64))
+        self.setWindowIcon(get_app_icon())
         self.resize(1020, 720)
         self.setMinimumSize(880, 600)
 
@@ -161,14 +162,35 @@ class TropicalMainWindow(QMainWindow):
         dlg.exec()
 
 def main():
-    # Enable High DPI scaling for crisp Frutiger Aero graphics
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     
     app = QApplication(sys.argv)
+    app.setWindowIcon(get_app_icon())
     apply_theme(app)
 
+    # Show Splash Screen
+    splash = TropicalSplashScreen()
+    splash.show()
+    splash.set_progress(25, "Frutiger Aero 테마 로딩 중...")
+    app.processEvents()
+
     window = TropicalMainWindow()
-    window.show()
+
+    def step2():
+        splash.set_progress(60, "yt-dlp 백엔드 및 모듈 연결 중...")
+        app.processEvents()
+        QTimer.singleShot(300, step3)
+
+    def step3():
+        splash.set_progress(100, "준비 완료! 메인 UI 실행 중...")
+        app.processEvents()
+        QTimer.singleShot(300, finish_splash)
+
+    def finish_splash():
+        window.show()
+        splash.finish(window)
+
+    QTimer.singleShot(300, step2)
 
     sys.exit(app.exec())
 

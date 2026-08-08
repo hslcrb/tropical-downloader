@@ -14,7 +14,7 @@ from core.config import config_manager
 from core.info_fetcher import MediaInfoWorker
 
 class ThumbnailLoader(QThread):
-    loaded = Signal(QPixmap)
+    loaded = Signal(bytes)
 
     def __init__(self, url: str):
         super().__init__()
@@ -24,9 +24,7 @@ class ThumbnailLoader(QThread):
         try:
             req = urllib.request.Request(self.url, headers={'User-Agent': 'Mozilla/5.0'})
             data = urllib.request.urlopen(req).read()
-            pixmap = QPixmap()
-            pixmap.loadFromData(data)
-            self.loaded.emit(pixmap)
+            self.loaded.emit(data)
         except Exception:
             pass
 
@@ -177,7 +175,9 @@ class QuickTab(QWidget):
             self.thumb_worker.loaded.connect(self.on_thumb_loaded)
             self.thumb_worker.start()
 
-    def on_thumb_loaded(self, pixmap: QPixmap):
+    def on_thumb_loaded(self, data_bytes: bytes):
+        pixmap = QPixmap()
+        pixmap.loadFromData(data_bytes)
         scaled = pixmap.scaled(220, 124, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
         self.thumb_lbl.setPixmap(scaled)
 

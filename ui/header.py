@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QFrame, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QApplication
 )
 from PySide6.QtCore import Signal, Qt
-from assets.icons import get_icon, get_pixmap
+from assets.icons import get_icon, get_pixmap, get_app_pixmap
 
 class TropicalHeader(QFrame):
     url_submitted = Signal(str)
@@ -29,7 +29,7 @@ class TropicalHeader(QFrame):
         logo_layout.setSpacing(10)
         
         logo_lbl = QLabel()
-        logo_lbl.setPixmap(get_pixmap("logo", 44, 44))
+        logo_lbl.setPixmap(get_app_pixmap(44, 44))
         logo_layout.addWidget(logo_lbl)
 
         title_vbox = QVBoxLayout()
