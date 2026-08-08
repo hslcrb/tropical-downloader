@@ -54,17 +54,16 @@ class DownloadWorker(QThread):
             os.makedirs(download_dir, exist_ok=True)
             
             out_template = self.options_override.get("filename_template") or config_manager.get("filename_template")
-            out_tmpl_full = os.path.join(download_dir, out_template)
-
             ydl_opts = {
                 'outtmpl': out_tmpl_full,
                 'progress_hooks': [self._progress_hook],
                 'logger': YtDlpLogger(self.log_signal.emit, self.task_id),
                 'nocheckcertificate': True,
                 'ignoreerrors': False,
+                'geo_bypass': True,
+                'geo_bypass_country': 'US',
+                'extractor_args': {'youtube': {'player_client': ['android', 'ios', 'web']}},
             }
-
-            # FFmpeg location override
             ffmpeg_path = config_manager.get("ffmpeg_path")
             if ffmpeg_path and os.path.exists(ffmpeg_path):
                 ydl_opts['ffmpeg_location'] = ffmpeg_path
