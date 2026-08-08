@@ -1,5 +1,5 @@
 """
-Tropical Downloader - Quick Download Tab
+Tropical Downloader - Quick Download Tab (Clean Modern Edition)
 """
 import os
 import urllib.request
@@ -29,7 +29,7 @@ class ThumbnailLoader(QThread):
             pass
 
 class QuickTab(QWidget):
-    start_download = Signal(dict) # params dict
+    start_download = Signal(dict)
 
     def __init__(self):
         super().__init__()
@@ -54,27 +54,27 @@ class QuickTab(QWidget):
         self.thumb_lbl = QLabel()
         self.thumb_lbl.setFixedSize(220, 124)
         self.thumb_lbl.setStyleSheet("""
-            background-color: #CAF0F8;
-            border: 2px solid #00B4D8;
-            border-radius: 12px;
+            background-color: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
         """)
         self.thumb_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.thumb_lbl.setPixmap(get_pixmap("logo", 64, 64))
+        self.thumb_lbl.setPixmap(get_pixmap("logo", 56, 56))
         hero_layout.addWidget(self.thumb_lbl)
 
         # Info Details
         info_vbox = QVBoxLayout()
         info_vbox.setSpacing(6)
 
-        self.title_lbl = QLabel("다운로드할 비디오 URL을 위에 입력해주세요")
-        self.title_lbl.setStyleSheet("font-size: 16px; font-weight: bold; color: #03045E;")
+        self.title_lbl = QLabel("다운로드할 비디오 URL을 입력해 주세요")
+        self.title_lbl.setStyleSheet("font-size: 15px; font-weight: 700; color: #0F172A;")
         self.title_lbl.setWordWrap(True)
 
         self.meta_lbl = QLabel("채널: --  •  재생시간: --")
-        self.meta_lbl.setStyleSheet("font-size: 12px; color: #0077B6; font-weight: 500;")
+        self.meta_lbl.setStyleSheet("font-size: 12px; color: #475569; font-weight: 500;")
 
-        self.status_lbl = QLabel("대기 중... URL을 입력하면 자동으로 정보 분석이 시작됩니다.")
-        self.status_lbl.setStyleSheet("font-size: 11px; color: #0096C7; font-style: italic;")
+        self.status_lbl = QLabel("대기 중... URL을 입력하면 메타데이터 분석이 시작됩니다.")
+        self.status_lbl.setStyleSheet("font-size: 12px; color: #64748B;")
 
         info_vbox.addWidget(self.title_lbl)
         info_vbox.addWidget(self.meta_lbl)
@@ -91,18 +91,17 @@ class QuickTab(QWidget):
 
         self.preset_group_btn = QButtonGroup(self)
 
-        self.radio_best = QRadioButton("🌟 최고 화질 비디오 (Original Best Video + Best Audio)")
-        self.radio_1080 = QRadioButton("🎬 Full HD 1080p (MP4)")
-        self.radio_720 = QRadioButton("📹 HD 720p (MP4)")
-        self.radio_mp3 = QRadioButton("🎵 MP3 고음질 오디오 추출 (320 kbps)")
-        self.radio_flac = QRadioButton("🎼 FLAC 무손실 오디오 추출")
-        self.radio_m4a = QRadioButton("🎧 M4A 오디오 추출")
+        self.radio_best = QRadioButton("최고 화질 비디오 (Original Best Video + Best Audio)")
+        self.radio_1080 = QRadioButton("Full HD 1080p (MP4)")
+        self.radio_720 = QRadioButton("HD 720p (MP4)")
+        self.radio_mp3 = QRadioButton("MP3 고음질 오디오 추출 (320 kbps)")
+        self.radio_flac = QRadioButton("FLAC 무손실 오디오 추출")
+        self.radio_m4a = QRadioButton("M4A 오디오 추출")
 
         self.radio_best.setChecked(True)
 
         radios = [self.radio_best, self.radio_1080, self.radio_720, self.radio_mp3, self.radio_flac, self.radio_m4a]
         for idx, r in enumerate(radios):
-            r.setStyleSheet("font-size: 13px; font-weight: 600; color: #03045E; padding: 4px;")
             self.preset_group_btn.addButton(r, idx)
             preset_layout.addWidget(r)
 
@@ -113,16 +112,16 @@ class QuickTab(QWidget):
         folder_layout.setSpacing(8)
 
         folder_lbl = QLabel("저장 위치:")
-        folder_lbl.setStyleSheet("font-weight: bold; color: #0077B6;")
+        folder_lbl.setStyleSheet("font-weight: 600; color: #334155;")
         folder_layout.addWidget(folder_lbl)
 
         self.path_lbl = QLabel(config_manager.get("download_path"))
         self.path_lbl.setStyleSheet("""
-            background-color: rgba(255, 255, 255, 0.9);
-            border: 1.5px solid #00B4D8;
-            border-radius: 10px;
+            background-color: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
             padding: 6px 12px;
-            color: #03045E;
+            color: #0F172A;
             font-weight: 500;
         """)
         folder_layout.addWidget(self.path_lbl, stretch=1)
@@ -134,16 +133,12 @@ class QuickTab(QWidget):
 
         layout.addLayout(folder_layout)
 
-        # Big Gel Quick Action Button
-        self.action_btn = QPushButton("⚡ 원클릭 다운로드 시작 (Quick Download)")
+        # Clean Action Button
+        self.action_btn = QPushButton(" 원클릭 다운로드 시작 (Quick Download)")
         self.action_btn.setObjectName("btn_primary")
-        self.action_btn.setIcon(get_icon("quick", 22))
-        self.action_btn.setFixedHeight(48)
-        self.action_btn.setStyleSheet("""
-            font-size: 16px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-        """)
+        self.action_btn.setIcon(get_icon("quick", 20))
+        self.action_btn.setFixedHeight(44)
+        self.action_btn.setStyleSheet("font-size: 15px; font-weight: 700;")
         self.action_btn.clicked.connect(self.on_quick_start)
         layout.addWidget(self.action_btn)
 
@@ -151,7 +146,7 @@ class QuickTab(QWidget):
 
     def analyze_url(self, url: str):
         """Starts background metadata parsing"""
-        self.status_lbl.setText("미디어 분석 중...")
+        self.status_lbl.setText("미디어 정보를 분석하는 중입니다...")
         self.title_lbl.setText("정보를 불러오는 중입니다...")
         
         self.info_worker = MediaInfoWorker(url)
@@ -164,9 +159,9 @@ class QuickTab(QWidget):
         self.title_lbl.setText(info.get("title", "제목 없음"))
         
         duration = info.get("duration", 0)
-        dur_str = f"{duration // 60}분 {duration % 60}초" if duration else "생방송 / 알 수 없음"
+        dur_str = f"{duration // 60}분 {duration % 60}초" if duration else "알 수 없음"
         self.meta_lbl.setText(f"채널: {info.get('uploader')}  •  재생시간: {dur_str}")
-        self.status_lbl.setText("분석 완료! 다운로드 방식을 선택하고 아래 버튼을 누르세요.")
+        self.status_lbl.setText("분석 완료. 프리셋을 선택하고 다운로드 버튼을 누르세요.")
 
         # Load Thumbnail
         thumb_url = info.get("thumbnail")
@@ -195,16 +190,14 @@ class QuickTab(QWidget):
     def on_quick_start(self):
         url = self.current_info.get("url") if self.current_info else ""
         if not url:
-            # Check parent window header URL if available
             main_window = self.window()
             if hasattr(main_window, "header"):
                 url = main_window.header.get_url()
 
         if not url:
-            self.status_lbl.setText("⚠️ 먼저 상단에 다운로드할 URL을 입력해 주세요.")
+            self.status_lbl.setText("먼저 상단 주소창에 다운로드할 URL을 입력해 주세요.")
             return
 
-        # Prepare parameters based on selected preset
         preset_idx = self.preset_group_btn.checkedId()
         params = {
             "url": url,

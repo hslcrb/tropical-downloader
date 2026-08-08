@@ -85,7 +85,7 @@ class TropicalMainWindow(QMainWindow):
 
         # 3. Status Bar
         self.status_bar = QStatusBar()
-        self.status_bar.showMessage("🌴 트로피컬 다운로더 준비 완료. URL을 입력하세요.")
+        self.status_bar.showMessage("트로피컬 다운로더 준비 완료. URL을 입력하세요.")
         self.setStatusBar(self.status_bar)
 
     def on_url_submitted(self, url: str):
@@ -142,13 +142,13 @@ class TropicalMainWindow(QMainWindow):
     def on_worker_finished(self, task_id: str, file_path: str, title: str):
         self.tab_queue.on_task_finished(task_id, file_path, title)
         self.tab_history.reload_history()
-        self.status_bar.showMessage(f"🎉 다운로드 완료: {title}")
+        self.status_bar.showMessage(f"다운로드 완료: {title}")
         if task_id in self.active_workers:
             del self.active_workers[task_id]
 
     def on_worker_error(self, task_id: str, err_msg: str):
         self.tab_queue.on_task_error(task_id, err_msg)
-        self.status_bar.showMessage(f"❌ 다운로드 오류: {err_msg}")
+        self.status_bar.showMessage(f"다운로드 오류: {err_msg}")
         if task_id in self.active_workers:
             del self.active_workers[task_id]
 
