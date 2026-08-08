@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 570 570">
+  <defs>
+    <clipPath id="clippath">
+      <rect x="35" y="35" width="500" height="500" fill="none"/>
+    </clipPath>
+    <pattern id="grid" x="0" y="0" width="62.5" height="62.5" patternTransform="translate(22297.2 21079.77) scale(3.81)" patternUnits="userSpaceOnUse" viewBox="0 0 62.5 62.5">
+      <g>
+        <rect width="62.5" height="62.5" fill="none"/>
+        <polyline points="62.5 62.5 0 62.5 0 0" fill="none" opacity=".04" stroke="#fff" stroke-miterlimit="7.81" stroke-width="1.95"/>
+      </g>
+    </pattern>
+    <radialGradient id="_무제_그라디언트_19" data-name="무제 그라디언트 19" cx="285" cy="191.25" fx="285" fy="191.25" r="109.38" gradientUnits="userSpaceOnUse">
+      <stop offset=".44" stop-color="#ff512f"/>
+      <stop offset="1" stop-color="#000"/>
+    </radialGradient>
+    <radialGradient id="_무제_그라디언트_16" data-name="무제 그라디언트 16" cx="285" cy="378.75" fx="285" fy="378.75" r="109.38" gradientUnits="userSpaceOnUse">
+      <stop offset=".46" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#000"/>
+    </radialGradient>
+    <mask id="mask" x="0" y="0" width="570" height="570" maskUnits="userSpaceOnUse">
+      <g id="monsteraMask">
+        <path d="M249.38,124.69h71.25v124.69h106.88l-142.5,187.03-142.5-187.03h106.88v-124.69Z" fill="#fff" stroke="#fff" stroke-linejoin="round" stroke-width="27.34"/>
+        <circle cx="169.22" cy="302.81" r="31.17"/>
+        <circle cx="231.56" cy="387.42" r="22.27"/>
+        <circle cx="236.02" cy="187.03" r="26.72"/>
+        <circle cx="400.78" cy="302.81" r="31.17"/>
+        <circle cx="338.44" cy="387.42" r="22.27"/>
+        <circle cx="333.98" cy="160.31" r="22.27"/>
+        <path d="M267.19,280.55l53.44,31.17-53.44,31.17v-62.34Z" stroke="#000" stroke-linejoin="round" stroke-width="11.72"/>
+      </g>
+    </mask>
+    <linearGradient id="_무제_그라디언트_7" data-name="무제 그라디언트 7" x1="36.02" y1="535.73" x2="37.16" y2="534.59" gradientTransform="translate(-18011.66 267865.04) scale(500 -500)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff512f"/>
+      <stop offset=".5" stop-color="#dd2476"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#clippath)">
+    <g>
+      <rect x="35" y="35" width="500" height="500" rx="109.37" ry="109.37" fill="#0a0c10"/>
+      <rect x="35" y="35" width="500" height="500" rx="109.37" ry="109.37" fill="url(#grid)"/>
+      <circle cx="285" cy="191.25" r="109.37" fill="url(#_무제_그라디언트_19)" isolation="isolate" opacity=".2"/>
+      <circle cx="285" cy="378.75" r="109.37" fill="url(#_무제_그라디언트_16)" isolation="isolate" opacity=".2"/>
+      <g mask="url(#mask)">
+        <rect width="570" height="570" fill="url(#_무제_그라디언트_7)"/>
+      </g>
+    </g>
+  </g>
+</svg>
