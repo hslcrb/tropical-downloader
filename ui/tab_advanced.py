@@ -1,7 +1,7 @@
 """
 Tropical Downloader - Advanced yt-dlp Options Tab
 Every major yt-dlp option exposed with a clean, grouped layout.
-Direct CLI pass-through covers anything not explicitly listed.
+Anti-429 Rate Limit Bypass & 100% official yt_dlp.parse_options CLI pass-through.
 """
 import shlex
 from PySide6.QtWidgets import (
@@ -55,14 +55,14 @@ class AdvancedTab(QWidget):
         layout.setSpacing(14)
 
         # ────────────────────────────────────────────────────────────
-        # 1. 출력 / 저장 설정
+        # 1. 출력 / 저장 설정 (댓글 / 설명 / info.json 기본 저장)
         # ────────────────────────────────────────────────────────────
-        grp_out = QGroupBox("출력 / 저장")
+        grp_out = QGroupBox("출력 / 메타데이터 저장")
         g = QVBoxLayout(grp_out)
 
         self.txt_output_tmpl = QLineEdit(config_manager.get(
-            "output_template", "%(uploader)s/%(title)s.%(ext)s"))
-        self.txt_output_tmpl.setPlaceholderText("%(title)s.%(ext)s")
+            "filename_template", "%(title)s [%(id)s].%(ext)s"))
+        self.txt_output_tmpl.setPlaceholderText("%(title)s [%(id)s].%(ext)s")
         g.addLayout(_row("파일명 템플릿:", self.txt_output_tmpl,
                          "yt-dlp -o 와 동일"))
 
@@ -73,36 +73,65 @@ class AdvancedTab(QWidget):
         self.combo_merge_fmt.setCurrentText(saved_merge)
         g.addLayout(_row("병합 컨테이너:", self.combo_merge_fmt))
 
-        self.chk_restrict_filenames = QCheckBox("특수문자 제거 (--restrict-filenames)")
-        self.chk_restrict_filenames.setChecked(config_manager.get("restrict_filenames", False))
-        self.chk_no_overwrites = QCheckBox("이미 있으면 건너뜀 (--no-overwrites)")
-        self.chk_no_overwrites.setChecked(config_manager.get("no_overwrites", True))
-        self.chk_write_desc = QCheckBox("설명 파일 저장 (--write-description)")
-        self.chk_write_desc.setChecked(config_manager.get("write_description", False))
-        self.chk_write_info = QCheckBox("info.json 저장 (--write-info-json)")
-        self.chk_write_info.setChecked(config_manager.get("write_info_json", False))
-        self.chk_write_comments = QCheckBox("댓글 저장 (--write-comments)")
-        self.chk_write_comments.setChecked(config_manager.get("write_comments", False))
+        self.chk_write_comments = QCheckBox("동영상 댓글 자동 저장 (--write-comments)")
+        self.chk_write_comments.setChecked(config_manager.get("write_comments", True))
+        self.chk_write_desc = QCheckBox("동영상 설명(Description) 파일 저장 (--write-description)")
+        self.chk_write_desc.setChecked(config_manager.get("write_description", True))
+        self.chk_write_info = QCheckBox("info.json 메타데이터 파일 저장 (--write-info-json)")
+        self.chk_write_info.setChecked(config_manager.get("write_info_json", True))
 
-        for chk in [self.chk_restrict_filenames, self.chk_no_overwrites,
-                    self.chk_write_desc, self.chk_write_info, self.chk_write_comments]:
+        self.chk_restrict_filenames = QCheckBox("파일명 특수문자 제거 (--restrict-filenames)")
+        self.chk_restrict_filenames.setChecked(config_manager.get("restrict_filenames", False))
+        self.chk_no_overwrites = QCheckBox("이미 존재하는 파일 건너뜀 (--no-overwrites)")
+        self.chk_no_overwrites.setChecked(config_manager.get("no_overwrites", True))
+
+        for chk in [self.chk_write_comments, self.chk_write_desc, self.chk_write_info,
+                    self.chk_restrict_filenames, self.chk_no_overwrites]:
             g.addWidget(chk)
 
         layout.addWidget(grp_out)
 
         # ────────────────────────────────────────────────────────────
-        # 2. 비디오 / 오디오 포스트프로세싱
+        # 2. 429 에러 방지 및 Anti-Bot 솔루션 (YouTube 429 우회)
         # ────────────────────────────────────────────────────────────
-        grp_pp = QGroupBox("포스트프로세싱 (FFmpeg)")
+        grp_429 = QGroupBox("429 Too Many Requests 방지 & 차단 우회 엔진")
+        g429 = QVBoxLayout(grp_429)
+
+        info_429 = QLabel("429 차단을 원천 방지하기 위해 요청 간 자동 지연(Sleep Interval) 및 다중 API 클라이언트 회피 기법이 적용됩니다.")
+        info_429.setStyleSheet("color: #0284C7; font-size: 11px; font-weight: bold;")
+        info_429.setWordWrap(True)
+        g429.addWidget(info_429)
+
+        self.spin_sleep_min = QSpinBox()
+        self.spin_sleep_min.setMinimum(0); self.spin_sleep_min.setMaximum(60)
+        self.spin_sleep_min.setValue(config_manager.get("sleep_interval", 1))
+
+        self.spin_sleep_max = QSpinBox()
+        self.spin_sleep_max.setMinimum(0); self.spin_sleep_max.setMaximum(60)
+        self.spin_sleep_max.setValue(config_manager.get("max_sleep_interval", 3))
+
+        self.txt_player_clients = QLineEdit(config_manager.get("player_clients", "android,ios,web,mweb,tv"))
+        self.txt_player_clients.setPlaceholderText("android,ios,web,mweb,tv")
+
+        g429.addLayout(_row("요청 최소 대기시간 (초):", self.spin_sleep_min, "429 차단 방지 지연"))
+        g429.addLayout(_row("요청 최대 대기시간 (초):", self.spin_sleep_max, "랜덤 지연 범위"))
+        g429.addLayout(_row("유튜브 플레이어 클라이언트:", self.txt_player_clients, "우회용 API 클라이언트 목록"))
+
+        layout.addWidget(grp_429)
+
+        # ────────────────────────────────────────────────────────────
+        # 3. 비디오 / 오디오 포스트프로세싱 (FFmpeg)
+        # ────────────────────────────────────────────────────────────
+        grp_pp = QGroupBox("포스트프로세싱 (FFmpeg 태그 / 썸네일)")
         g2 = QVBoxLayout(grp_pp)
 
-        self.chk_embed_thumb = QCheckBox("썸네일 임베딩 (--embed-thumbnail)")
+        self.chk_embed_thumb = QCheckBox("썸네일 이미지 파일 내 임베딩 (--embed-thumbnail)")
         self.chk_embed_thumb.setChecked(config_manager.get("embed_thumbnail", True))
-        self.chk_embed_meta = QCheckBox("메타데이터 임베딩 (--add-metadata)")
+        self.chk_embed_meta = QCheckBox("메타데이터 태그 파일 내 임베딩 (--add-metadata)")
         self.chk_embed_meta.setChecked(config_manager.get("embed_metadata", True))
         self.chk_embed_chapters = QCheckBox("챕터 마커 임베딩 (--embed-chapters)")
         self.chk_embed_chapters.setChecked(config_manager.get("embed_chapters", False))
-        self.chk_remux_video = QCheckBox("리먹스만 (재인코딩 없음, --remux-video)")
+        self.chk_remux_video = QCheckBox("리먹스만 진행 (재인코딩 없음, --remux-video)")
         self.chk_remux_video.setChecked(config_manager.get("remux_video", False))
 
         self.combo_recode_video = QComboBox()
@@ -118,17 +147,17 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_pp)
 
         # ────────────────────────────────────────────────────────────
-        # 3. 자막
+        # 4. 자막
         # ────────────────────────────────────────────────────────────
-        grp_sub = QGroupBox("자막")
+        grp_sub = QGroupBox("자막 설정")
         g3 = QVBoxLayout(grp_sub)
 
-        self.chk_embed_subs = QCheckBox("자막 임베딩 (--embed-subs)")
-        self.chk_embed_subs.setChecked(config_manager.get("embed_subs", False))
-        self.chk_write_subs = QCheckBox("자막 파일 저장 (--write-subs)")
-        self.chk_write_subs.setChecked(config_manager.get("write_subs", False))
+        self.chk_embed_subs = QCheckBox("자막 영상 내 임베딩 (--embed-subs)")
+        self.chk_embed_subs.setChecked(config_manager.get("embed_subs", True))
+        self.chk_write_subs = QCheckBox("자막 파일 별도 저장 (--write-subs)")
+        self.chk_write_subs.setChecked(config_manager.get("write_subs", True))
         self.chk_auto_subs = QCheckBox("자동 생성 자막 포함 (--write-auto-subs)")
-        self.chk_auto_subs.setChecked(config_manager.get("write_auto_subs", False))
+        self.chk_auto_subs.setChecked(config_manager.get("write_auto_subs", True))
 
         self.txt_sub_langs = QLineEdit(config_manager.get("sub_langs", "ko,en.*"))
         self.txt_sub_langs.setPlaceholderText("ko,en.* (쉼표로 구분)")
@@ -145,9 +174,9 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_sub)
 
         # ────────────────────────────────────────────────────────────
-        # 4. 재생목록 / 범위
+        # 5. 재생목록 / 범위
         # ────────────────────────────────────────────────────────────
-        grp_pl = QGroupBox("재생목록 / 범위 (플레이리스트 탭과 연동)")
+        grp_pl = QGroupBox("재생목록 / 범위")
         g4 = QVBoxLayout(grp_pl)
 
         self.spin_playlist_start = QSpinBox()
@@ -174,7 +203,7 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_pl)
 
         # ────────────────────────────────────────────────────────────
-        # 5. SponsorBlock
+        # 6. SponsorBlock
         # ────────────────────────────────────────────────────────────
         grp_sb = QGroupBox("SponsorBlock (YouTube 전용)")
         g5 = QVBoxLayout(grp_sb)
@@ -191,9 +220,9 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_sb)
 
         # ────────────────────────────────────────────────────────────
-        # 6. 쿠키 / 인증
+        # 7. 쿠키 / 인증 (429 에러 방지 강력 권장)
         # ────────────────────────────────────────────────────────────
-        grp_auth = QGroupBox("쿠키 / 인증")
+        grp_auth = QGroupBox("쿠키 / 인증 (로그인 연동으로 429 차단완전해제)")
         g6 = QVBoxLayout(grp_auth)
 
         self.combo_browser = QComboBox()
@@ -237,7 +266,7 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_auth)
 
         # ────────────────────────────────────────────────────────────
-        # 7. 네트워크
+        # 8. 네트워크
         # ────────────────────────────────────────────────────────────
         grp_net = QGroupBox("네트워크")
         g7 = QVBoxLayout(grp_net)
@@ -273,13 +302,13 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_net)
 
         # ────────────────────────────────────────────────────────────
-        # 8. 지역 우회 / 기타
+        # 9. 지역 우회 / 기타
         # ────────────────────────────────────────────────────────────
         grp_misc = QGroupBox("지역 우회 / 기타")
         g8 = QVBoxLayout(grp_misc)
 
         self.chk_geo_bypass = QCheckBox("지역 제한 우회 시도 (--geo-bypass)")
-        self.chk_geo_bypass.setChecked(config_manager.get("geo_bypass", False))
+        self.chk_geo_bypass.setChecked(config_manager.get("geo_bypass", True))
         self.txt_geo_country = QLineEdit(config_manager.get("geo_bypass_country", ""))
         self.txt_geo_country.setPlaceholderText("예: US, KR (비우면 자동)")
         self.chk_age_limit = QCheckBox("연령 제한 건너뜀 (--age-limit 99)")
@@ -307,21 +336,22 @@ class AdvancedTab(QWidget):
         layout.addWidget(grp_misc)
 
         # ────────────────────────────────────────────────────────────
-        # 9. Custom CLI (100% yt-dlp pass-through)
+        # 10. Custom CLI (yt_dlp.parse_options 공식 100% 지원)
         # ────────────────────────────────────────────────────────────
-        grp_cli = QGroupBox("사용자 정의 CLI 인자 — yt-dlp의 모든 기능 지원")
+        grp_cli = QGroupBox("yt-dlp 100% 전 기능 CLI 커스텀 인자 파서")
         g9 = QVBoxLayout(grp_cli)
 
         hint = QLabel(
-            "위 옵션으로 제공되지 않는 yt-dlp 인자를 직접 입력하세요.\n"
-            "예:  --write-comments --compat-options filename  --extractor-args \"youtube:skip=dash\""
+            "yt-dlp의 모든 CLI 옵션을 100% 그대로 입력하실 수 있습니다.\n"
+            "공식 yt_dlp.parse_options 파서가 구문을 완전 분석하여 자동 적용합니다.\n"
+            "예: --write-comments --sleep-requests 1.5 --impersonate chrome --extractor-args \"youtube:player_client=android,ios\""
         )
-        hint.setStyleSheet("color: #475569; font-size: 11px;")
+        hint.setStyleSheet("color: #0284C7; font-size: 11px;")
         hint.setWordWrap(True)
         g9.addWidget(hint)
 
         self.txt_custom_cli = QLineEdit(config_manager.get("custom_cli_args", ""))
-        self.txt_custom_cli.setPlaceholderText("--option value --flag ...")
+        self.txt_custom_cli.setPlaceholderText("--write-comments --sleep-interval 2 --max-sleep-interval 5")
         g9.addWidget(self.txt_custom_cli)
 
         layout.addWidget(grp_cli)
@@ -362,13 +392,16 @@ class AdvancedTab(QWidget):
 
     def save_settings(self):
         cfg = config_manager
-        cfg.set("output_template", self.txt_output_tmpl.text().strip())
+        cfg.set("filename_template", self.txt_output_tmpl.text().strip())
         cfg.set("merge_output_format", self.combo_merge_fmt.currentData())
         cfg.set("restrict_filenames", self.chk_restrict_filenames.isChecked())
         cfg.set("no_overwrites", self.chk_no_overwrites.isChecked())
         cfg.set("write_description", self.chk_write_desc.isChecked())
         cfg.set("write_info_json", self.chk_write_info.isChecked())
         cfg.set("write_comments", self.chk_write_comments.isChecked())
+        cfg.set("sleep_interval", self.spin_sleep_min.value())
+        cfg.set("max_sleep_interval", self.spin_sleep_max.value())
+        cfg.set("player_clients", self.txt_player_clients.text().strip())
         cfg.set("embed_thumbnail", self.chk_embed_thumb.isChecked())
         cfg.set("embed_metadata", self.chk_embed_meta.isChecked())
         cfg.set("embed_chapters", self.chk_embed_chapters.isChecked())
@@ -419,22 +452,29 @@ class AdvancedTab(QWidget):
 
         if g("restrict_filenames"):   opts["restrictfilenames"] = True
         if g("no_overwrites"):        opts["nooverwrites"] = True
-        if g("write_description"):    opts["writedescription"] = True
-        if g("write_info_json"):      opts["writeinfojson"] = True
-        if g("write_comments"):       opts["getcomments"] = True
+        opts["writedescription"]    = g("write_description", True)
+        opts["writeinfojson"]       = g("write_info_json", True)
+        opts["getcomments"]         = g("write_comments", True)
 
-        if g("embed_thumbnail"):      opts["embedthumbnail"] = True
-        if g("embed_metadata"):       opts["addmetadata"] = True
-        if g("embed_chapters"):       opts["embedchapters"] = True
+        opts["sleep_interval"]      = float(g("sleep_interval", 1))
+        opts["max_sleep_interval"]  = float(g("max_sleep_interval", 3))
+
+        player_clients = g("player_clients", "android,ios,web,mweb,tv")
+        client_list = [c.strip() for c in player_clients.split(",") if c.strip()]
+        opts["extractor_args"] = {"youtube": {"player_client": client_list}}
+
+        if g("embed_thumbnail", True):  opts["embedthumbnail"] = True
+        if g("embed_metadata", True):   opts["addmetadata"] = True
+        if g("embed_chapters"):         opts["embedchapters"] = True
 
         recode = g("recode_video", "없음")
         if recode and recode != "없음":
             opts["recodevideo"] = recode
 
-        if g("embed_subs"):           opts["embedsubtitles"] = True
-        if g("write_subs"):           opts["writesubtitles"] = True
-        if g("write_auto_subs"):      opts["writeautomaticsub"] = True
-        sub_langs = g("sub_langs", "")
+        if g("embed_subs", True):       opts["embedsubtitles"] = True
+        if g("write_subs", True):       opts["writesubtitles"] = True
+        if g("write_auto_subs", True):  opts["writeautomaticsub"] = True
+        sub_langs = g("sub_langs", "ko,en.*")
         if sub_langs:                 opts["subtitleslangs"] = sub_langs.split(",")
         opts["subtitlesformat"] = g("sub_format", "srt")
 
@@ -456,7 +496,7 @@ class AdvancedTab(QWidget):
         opts["retries"] = g("retries", 10)
         opts["socket_timeout"] = g("socket_timeout", 30)
 
-        if g("geo_bypass"):
+        if g("geo_bypass", True):
             opts["geo_bypass"] = True
             country = g("geo_bypass_country", "")
             if country:
@@ -479,7 +519,7 @@ class AdvancedTab(QWidget):
 
         opts["concurrent_fragment_downloads"] = g("concurrent_fragments", 4)
 
-        tmpl = g("output_template", "%(title)s.%(ext)s")
+        tmpl = g("filename_template", "%(title)s [%(id)s].%(ext)s")
         if tmpl:                      opts["outtmpl"] = tmpl
 
         return opts

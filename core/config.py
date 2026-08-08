@@ -19,9 +19,16 @@ DEFAULT_CONFIG = {
     "rate_limit": "",
     "sponsorblock": False,
     "embed_subs": True,
+    "write_subs": True,
     "sub_langs": "ko,en.*",
     "embed_thumbnail": True,
     "embed_metadata": True,
+    "write_comments": True,       # 기본적으로 동영상 댓글 저장
+    "write_description": True,    # 기본적으로 설명 파일 저장
+    "write_info_json": True,      # 기본적으로 info.json 메타데이터 저장
+    "sleep_interval": 1,          # 429 에러 방지 요청 지연 최솟값
+    "max_sleep_interval": 3,      # 429 에러 방지 요청 지연 최댓값
+    "player_clients": "android,ios,web,mweb,tv", # 429 차단 우회 다중 클라이언트
     "concurrent_downloads": 2,
     "filename_template": "%(title)s [%(id)s].%(ext)s",
     "custom_cli_args": ""
@@ -39,7 +46,10 @@ class ConfigManager:
             try:
                 with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
                     saved = json.load(f)
-                    self.config.update(saved)
+                    # Merge with default config to ensure new keys exist
+                    merged = DEFAULT_CONFIG.copy()
+                    merged.update(saved)
+                    self.config = merged
             except Exception as e:
                 print(f"[ConfigManager] Error loading config: {e}")
 
