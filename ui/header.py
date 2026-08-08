@@ -1,12 +1,15 @@
 """
-Tropical Downloader - Header Bar Component
+Tropical Downloader - Header Bar
+Sky blue brand colors, clean layout, no emoji.
 """
 import shutil
 from PySide6.QtWidgets import (
     QFrame, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QApplication
 )
 from PySide6.QtCore import Signal, Qt
-from assets.icons import get_icon, get_pixmap, get_app_pixmap
+from PySide6.QtGui import QFont
+from assets.icons import get_icon, get_app_pixmap
+
 
 class TropicalHeader(QFrame):
     url_submitted = Signal(str)
@@ -21,99 +24,92 @@ class TropicalHeader(QFrame):
 
     def init_ui(self):
         main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(16, 12, 16, 12)
-        main_layout.setSpacing(16)
+        main_layout.setContentsMargins(16, 10, 16, 10)
+        main_layout.setSpacing(14)
 
-        # Brand Logo & Title Section
-        logo_layout = QHBoxLayout()
-        logo_layout.setSpacing(10)
-        
+        # ── Brand ───────────────────────────────────────────────────
+        brand = QHBoxLayout()
+        brand.setSpacing(10)
+
         logo_lbl = QLabel()
-        logo_lbl.setPixmap(get_app_pixmap(44, 44))
-        logo_layout.addWidget(logo_lbl)
+        logo_lbl.setPixmap(get_app_pixmap(40, 40))
+        brand.addWidget(logo_lbl)
 
-        title_vbox = QVBoxLayout()
-        title_vbox.setSpacing(0)
-        
-        title_lbl = QLabel("Tropical Downloader")
-        title_lbl.setStyleSheet("""
-            font-size: 19px;
-            font-weight: 900;
-            color: #0077B6;
-            letter-spacing: 0.5px;
-        """)
-        
-        sub_lbl = QLabel("트로피컬 다운로더 v2.0 • Frutiger Aero Edition")
-        sub_lbl.setStyleSheet("font-size: 11px; color: #0096C7; font-weight: 600;")
-        
-        title_vbox.addWidget(title_lbl)
-        title_vbox.addWidget(sub_lbl)
-        logo_layout.addLayout(title_vbox)
+        vbox = QVBoxLayout()
+        vbox.setSpacing(1)
 
-        main_layout.addLayout(logo_layout)
-        main_layout.addSpacing(10)
+        title = QLabel("Tropical Downloader")
+        title.setFont(QFont("Segoe UI", 16, QFont.Weight.Bold))
+        title.setStyleSheet("color: #0284C7; letter-spacing: 0.3px;")
 
-        # Center: URL Input Box with Aero Gloss styling
-        input_layout = QHBoxLayout()
-        input_layout.setSpacing(8)
+        sub = QLabel("yt-dlp powered  •  v2.0")
+        sub.setStyleSheet("font-size: 11px; color: #38BDF8; font-weight: 600;")
+
+        vbox.addWidget(title)
+        vbox.addWidget(sub)
+        brand.addLayout(vbox)
+        main_layout.addLayout(brand)
+        main_layout.addSpacing(8)
+
+        # ── URL input row ────────────────────────────────────────────
+        input_row = QHBoxLayout()
+        input_row.setSpacing(8)
 
         self.url_input = QLineEdit()
-        self.url_input.setPlaceholderText("비디오 또는 플레이리스트 URL을 입력하거나 붙여넣으세요...")
+        self.url_input.setPlaceholderText("비디오 · 재생목록 · 채널 URL 입력 또는 붙여넣기…")
         self.url_input.setFixedHeight(38)
         self.url_input.returnPressed.connect(self.on_submit_url)
-        input_layout.addWidget(self.url_input, stretch=1)
+        input_row.addWidget(self.url_input, stretch=1)
 
-        # Paste Button
-        self.paste_btn = QPushButton(" 붙여넣기")
-        self.paste_btn.setIcon(get_icon("paste", 18))
+        self.paste_btn = QPushButton("붙여넣기")
+        self.paste_btn.setIcon(get_icon("paste", 16))
         self.paste_btn.setFixedHeight(38)
-        self.paste_btn.setToolTip("클립보드 URL 자동 감지 및 붙여넣기")
+        self.paste_btn.setFixedWidth(100)
+        self.paste_btn.setToolTip("클립보드 URL 붙여넣기 (Ctrl+V)")
         self.paste_btn.clicked.connect(self.on_paste_url)
-        input_layout.addWidget(self.paste_btn)
+        input_row.addWidget(self.paste_btn)
 
-        # Quick Download Button
-        self.dl_btn = QPushButton(" 다운로드")
+        self.dl_btn = QPushButton("분석 / 다운로드")
         self.dl_btn.setObjectName("btn_primary")
-        self.dl_btn.setIcon(get_icon("download", 18))
+        self.dl_btn.setIcon(get_icon("download", 16))
         self.dl_btn.setFixedHeight(38)
+        self.dl_btn.setFixedWidth(140)
         self.dl_btn.clicked.connect(self.on_submit_url)
-        input_layout.addWidget(self.dl_btn)
+        input_row.addWidget(self.dl_btn)
 
-        main_layout.addLayout(input_layout, stretch=1)
+        main_layout.addLayout(input_row, stretch=1)
 
-        # Right Action Buttons & FFmpeg Status Badge
-        right_layout = QHBoxLayout()
-        right_layout.setSpacing(8)
+        # ── Right badges ─────────────────────────────────────────────
+        right = QHBoxLayout()
+        right.setSpacing(8)
 
-        # FFmpeg Badge
-        ffmpeg_exists = shutil.which("ffmpeg") is not None
-        self.ffmpeg_badge = QLabel("FFmpeg OK" if ffmpeg_exists else "FFmpeg 없음")
-        badge_bg = "#06D6A0" if ffmpeg_exists else "#FF6B4A"
-        self.ffmpeg_badge.setStyleSheet(f"""
-            background-color: {badge_bg};
-            color: #FFFFFF;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 10px;
-        """)
-        self.ffmpeg_badge.setToolTip("FFmpeg가 설치되어 있으면 고화질 병합 및 오디오 변환을 지원합니다.")
-        right_layout.addWidget(self.ffmpeg_badge)
+        ffmpeg_ok = shutil.which("ffmpeg") is not None
+        badge = QLabel("FFmpeg ✓" if ffmpeg_ok else "FFmpeg ✗")
+        badge.setStyleSheet(
+            f"background-color:{'#0EA5E9' if ffmpeg_ok else '#EF4444'};"
+            "color:#FFFFFF; font-size:11px; font-weight:700;"
+            "padding:4px 10px; border-radius:10px;"
+        )
+        badge.setToolTip(
+            "FFmpeg가 설치되어 있습니다. 고화질 병합 및 오디오 변환을 지원합니다."
+            if ffmpeg_ok else
+            "FFmpeg가 없습니다. 일부 기능이 제한될 수 있습니다."
+        )
+        right.addWidget(badge)
 
-        # Info/About Button
         self.info_btn = QPushButton()
+        self.info_btn.setObjectName("btn_ghost")
         self.info_btn.setIcon(get_icon("info", 20))
-        self.info_btn.setFixedSize(38, 38)
-        self.info_btn.setToolTip("트로피컬 다운로더 정보 및 라이선스 고지")
+        self.info_btn.setFixedSize(36, 36)
+        self.info_btn.setToolTip("정보 / 라이선스")
         self.info_btn.clicked.connect(self.open_about.emit)
-        right_layout.addWidget(self.info_btn)
+        right.addWidget(self.info_btn)
 
-        main_layout.addLayout(right_layout)
+        main_layout.addLayout(right)
 
     def on_paste_url(self):
-        clipboard = QApplication.clipboard()
-        text = clipboard.text().strip()
-        if text.startswith("http://") or text.startswith("https://"):
+        text = QApplication.clipboard().text().strip()
+        if text.startswith(("http://", "https://")):
             self.url_input.setText(text)
             self.url_submitted.emit(text)
 

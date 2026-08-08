@@ -27,10 +27,10 @@ from core.yt_worker import DownloadWorker
 class TropicalMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Tropical Downloader - 트로피컬 아일랜드 Y2K 다운로더")
+        self.setWindowTitle("Tropical Downloader")
         self.setWindowIcon(get_app_icon())
         self.resize(1020, 720)
-        self.setMinimumSize(880, 600)
+        self.setMinimumSize(900, 620)
 
         self.active_workers = {}  # task_id -> DownloadWorker
 
@@ -114,30 +114,32 @@ class TropicalMainWindow(QMainWindow):
             return
 
         task_id = f"task_{uuid.uuid4().hex[:6]}"
-        title = self.tab_quick.current_info.get("title", url) if self.tab_quick.current_info else url
+        title = (self.tab_quick.current_info or {}).get("title", url)
 
-        # Retrieve custom CLI args from Advanced Tab if present
+        # Inject advanced-tab options (every yt-dlp setting the user configured)
+        adv_opts = {}
+        try:
+            adv_opts = self.tab_advanced.get_ydl_opts()
+        except Exception:
+            pass
+        params["_adv_opts"] = adv_opts
+
         custom_args = self.tab_advanced.get_custom_args()
 
-        # Create worker thread
-        worker = DownloadWorker(task_id=task_id, url=url, options_override=params, custom_args=custom_args)
+        worker = DownloadWorker(task_id=task_id, url=url,
+                                options_override=params, custom_args=custom_args)
         self.active_workers[task_id] = worker
 
-        # Register in Queue tab
         self.tab_queue.add_task(task_id, title, url)
 
-        # Connect Signals
         worker.progress_signal.connect(self.tab_queue.update_progress)
         worker.log_signal.connect(self.tab_history.append_log)
         worker.finished_signal.connect(self.on_worker_finished)
         worker.error_signal.connect(self.on_worker_error)
 
-        # Start Download Thread
         worker.start()
-
-        # Switch to Queue Tab
         self.tabs.setCurrentWidget(self.tab_queue)
-        self.status_bar.showMessage(f"다운로드 시작: [{title}]")
+        self.status_bar.showMessage(f"다운로드 시작: {title}")
 
     def on_worker_finished(self, task_id: str, file_path: str, title: str):
         self.tab_queue.on_task_finished(task_id, file_path, title)
