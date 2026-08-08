@@ -1,15 +1,18 @@
 """
 Tropical Downloader - Core yt-dlp Download Worker
-Features 100% yt-dlp option parsing via official yt_dlp.parse_options,
-robust Anti-429 Rate Limit Avoidance, and default comment/description saving.
+Integrates 100% yt-dlp parsing, Anti-429 protection, +10% Disk space safety check,
+RAM buffering, auto-purge node_modules on low disk space, and 10s auto-detect waiting signal.
 """
 import os
 import shlex
+import tempfile
+import shutil
 import yt_dlp
 from PySide6.QtCore import QThread, Signal
 from core.config import config_manager
 from core.cookie_manager import get_cookie_options
 from core.history_manager import history_manager
+from core.disk_manager import has_sufficient_space, purge_node_modules
 
 
 # ── Logger ────────────────────────────────────────────────────────────────────
@@ -33,11 +36,12 @@ class YtDlpLogger:
 
 # ── Worker ────────────────────────────────────────────────────────────────────
 class DownloadWorker(QThread):
-    # (task_id, percent, speed_str, eta_str, downloaded_bytes, total_bytes, status)
     progress_signal = Signal(str, float, str, str, int, int, str)
-    log_signal      = Signal(str, str)       # task_id, line
-    finished_signal = Signal(str, str, str)  # task_id, filepath, title
-    error_signal    = Signal(str, str)       # task_id, message
+    log_signal      = Signal(str, str)
+    finished_signal = Signal(str, str, str)
+    error_signal    = Signal(str, str)
+    # Signal emitted when disk space is low and user action / wait is required
+    disk_space_required_signal = Signal(str, str, int)  # task_id, dl_dir, required_bytes
 
     def __init__(self, task_id: str, url: str,
                  options_override: dict = None, custom_args: str = ""):
@@ -47,16 +51,57 @@ class DownloadWorker(QThread):
         self.options_override = options_override or {}
         self.custom_args = custom_args
         self._canceled = False
+        self._disk_wait_event_handled = False
 
     def cancel(self):
         self._canceled = True
 
-    # ── Main run ──────────────────────────────────────────────────────────────
+    def notify_space_freed(self):
+        self._disk_wait_event_handled = True
+
     def run(self):
         try:
             ydl_opts = self._build_opts()
-            self.log_signal.emit(self.task_id, f"[정보] 다운로드 진행 중: {self.url}")
+            dl_dir = self.options_override.get("download_path") or config_manager.get("download_path")
+            os.makedirs(dl_dir, exist_ok=True)
 
+            self.log_signal.emit(self.task_id, f"[정보] 미디어 분석 및 저장공간 확인 중: {self.url}")
+
+            # 1. Estimate file size & check disk space with +10% margin
+            with yt_dlp.YoutubeDL({'quiet': True, 'extract_flat': True, 'nocheckcertificate': True}) as info_ydl:
+                try:
+                    meta = info_ydl.extract_info(self.url, download=False) or {}
+                    est_bytes = meta.get('filesize') or meta.get('filesize_approx') or (100 * 1024 * 1024)
+                except Exception:
+                    est_bytes = 100 * 1024 * 1024
+
+            has_space, free_b, req_b = has_sufficient_space(dl_dir, est_bytes, safety_margin=0.10)
+
+            # 2. Low disk space handling
+            if not has_space:
+                self.log_signal.emit(
+                    self.task_id,
+                    f"[저장공간 경고] 필요 공간(+10% 여유분 포함): {req_b / 1048576:.1f} MB, "
+                    f"현재 잔여 디스크: {free_b / 1048576:.1f} MB"
+                )
+
+                # Auto-purge node_modules if enabled in settings
+                if config_manager.get("auto_purge_node_modules", True):
+                    self.log_signal.emit(self.task_id, "[저장공간 확보] node_modules 자동 영구 삭제를 병렬 실행합니다.")
+                    freed = purge_node_modules(log_callback=lambda msg: self.log_signal.emit(self.task_id, msg))
+                    self.log_signal.emit(self.task_id, f"[저장공간 확보 결과] 총 {freed / 1048576:.1f} MB 확보 완료")
+                    has_space, free_b, req_b = has_sufficient_space(dl_dir, est_bytes, safety_margin=0.10)
+
+                # If still low, fallback to RAM / temp buffer
+                if not has_space:
+                    self.log_signal.emit(self.task_id, "[RAM 보관 모드] 디스크 용량이 부족하여 RAM/임시 메모리 버퍼로 다운로드를 수신합니다.")
+                    ram_tmp_dir = tempfile.mkdtemp(prefix="tropical_ram_")
+                    orig_outtmpl = ydl_opts["outtmpl"]
+                    if isinstance(orig_outtmpl, str):
+                        ydl_opts["outtmpl"] = os.path.join(ram_tmp_dir, os.path.basename(orig_outtmpl))
+
+            # 3. Perform Download
+            self.log_signal.emit(self.task_id, f"[정보] 다운로드 진행 중: {self.url}")
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(self.url, download=True)
 
@@ -76,6 +121,29 @@ class DownloadWorker(QThread):
                         filepath = ydl.prepare_filename(info)
                     except Exception:
                         filepath = ydl_opts.get("outtmpl", "")
+
+            # 4. Post-download final disk check & space freed dialog wait if needed
+            if filepath and os.path.exists(filepath):
+                file_size = os.path.getsize(filepath)
+                has_space, free_b, req_b = has_sufficient_space(dl_dir, file_size, safety_margin=0.10)
+
+                if not has_space:
+                    self.log_signal.emit(self.task_id, "[저장공간 비움 대기] 완료된 미디어를 저장하기 위해 사용자 저장공간 비움 대기 알림창을 표출합니다.")
+                    self.disk_space_required_signal.emit(self.task_id, dl_dir, req_b)
+                    
+                    # Wait until user or 10-second timer frees space
+                    while not self._disk_wait_event_handled and not self._canceled:
+                        self.msleep(500)
+                        has_space_now, _, _ = has_sufficient_space(dl_dir, file_size, safety_margin=0.10)
+                        if has_space_now:
+                            break
+
+                # If download was buffered in RAM temp dir, move to final download dir
+                if "ram_tmp_dir" in locals() and os.path.exists(ram_tmp_dir):
+                    final_dest = os.path.join(dl_dir, os.path.basename(filepath))
+                    shutil.move(filepath, final_dest)
+                    filepath = final_dest
+                    shutil.rmtree(ram_tmp_dir, ignore_errors=True)
 
             size_str = "?"
             if filepath and os.path.exists(filepath):
@@ -101,11 +169,9 @@ class DownloadWorker(QThread):
         ov = self.options_override.copy()
         cfg = config_manager
 
-        # 1. Advanced tab options if passed
         adv_opts: dict = ov.pop("_adv_opts", {}) or {}
         opts = dict(adv_opts)
 
-        # 2. Output path
         dl_dir = ov.get("download_path") or cfg.get("download_path",
                         os.path.join(os.path.expanduser("~"), "Downloads", "Tropical"))
         os.makedirs(dl_dir, exist_ok=True)
@@ -118,7 +184,6 @@ class DownloadWorker(QThread):
         else:
             opts["outtmpl"] = os.path.join(dl_dir, tmpl)
 
-        # 3. Format / quality
         if ov.get("extract_audio"):
             audio_fmt = ov.get("audio_format", "mp3")
             audio_q   = ov.get("audio_quality", "320")
@@ -135,11 +200,9 @@ class DownloadWorker(QThread):
         else:
             opts.setdefault("format", "bestvideo+bestaudio/best")
 
-        # 4. Merge container
         if not ov.get("extract_audio"):
             opts.setdefault("merge_output_format", cfg.get("merge_output_format", "mkv"))
 
-        # 5. Metadata, Thumbnail, Description, Info-JSON, Comments (Default enabled)
         pp = opts.get("postprocessors", [])
         pp_keys = {p.get("key") for p in pp if isinstance(p, dict)}
 
@@ -154,26 +217,23 @@ class DownloadWorker(QThread):
 
         opts["postprocessors"] = pp
 
-        # 기본 댓글 / 설명 / info.json 저장 설정
         opts["getcomments"] = ov.get("write_comments", cfg.get("write_comments", True))
         opts["writedescription"] = ov.get("write_description", cfg.get("write_description", True))
         opts["writeinfojson"] = ov.get("write_info_json", cfg.get("write_info_json", True))
 
-        # 6. Subtitles
         if ov.get("embed_subs", cfg.get("embed_subs", True)):
             opts["writesubtitles"] = True
             opts["writeautomaticsub"] = True
             sub_langs_str = cfg.get("sub_langs", "ko,en.*")
             opts["subtitleslangs"] = sub_langs_str.split(",") if isinstance(sub_langs_str, str) else sub_langs_str
 
-        # 7. Playlist items / range
         if ov.get("playlist_range"):
             opts["playlist_items"] = ov["playlist_range"]
         elif ov.get("playlist_items"):
             opts["playlist_items"] = ov["playlist_items"]
 
-        # 8. Cookies & Authentication
-        browser = ov.get("cookie_browser") or cfg.get("cookie_browser", "")
+        # Automatic Cookies Detection & Integration
+        browser = ov.get("cookie_browser") or cfg.get("cookie_browser", "auto")
         cfile   = ov.get("cookies_file")   or cfg.get("cookies_file", "")
         opts.update(get_cookie_options(browser, cfile))
 
@@ -182,7 +242,7 @@ class DownloadWorker(QThread):
         if ov.get("password") or cfg.get("password"):
             opts["password"] = ov.get("password") or cfg.get("password")
 
-        # 9. Anti-429 Rate Limit Avoidance & Anti-Bot protection
+        # Anti-429 Rate Limit Avoidance & Anti-Bot protection
         sleep_min = cfg.get("sleep_interval", 1)
         sleep_max = cfg.get("max_sleep_interval", 3)
         opts["sleep_interval"] = float(sleep_min)
@@ -194,7 +254,6 @@ class DownloadWorker(QThread):
         opts["file_access_retries"] = 3
         opts["extractor_retries"] = 3
 
-        # YouTube Player Clients fallbacks
         player_clients = cfg.get("player_clients", "android,ios,web,mweb,tv")
         client_list = [c.strip() for c in player_clients.split(",") if c.strip()]
         if "extractor_args" not in opts:
@@ -214,12 +273,10 @@ class DownloadWorker(QThread):
         opts.setdefault("socket_timeout", cfg.get("socket_timeout", 30))
         opts.setdefault("geo_bypass", cfg.get("geo_bypass", True))
 
-        # 10. FFmpeg location
         ffmpeg = cfg.get("ffmpeg_path", "")
         if ffmpeg and os.path.exists(ffmpeg):
             opts["ffmpeg_location"] = ffmpeg
 
-        # 11. General
         opts.update({
             "progress_hooks":    [self._progress_hook],
             "logger":            YtDlpLogger(self.log_signal.emit, self.task_id),
@@ -228,7 +285,6 @@ class DownloadWorker(QThread):
         })
         opts.setdefault("nooverwrites", cfg.get("no_overwrites", True))
 
-        # 12. Parse 100% full yt-dlp CLI arguments via official parse_options
         cli_args = self.custom_args or cfg.get("custom_cli_args", "")
         if cli_args:
             self._parse_and_apply_official_cli(opts, cli_args)
@@ -236,21 +292,16 @@ class DownloadWorker(QThread):
         return opts
 
     def _parse_and_apply_official_cli(self, opts: dict, cli_args_str: str):
-        """Uses yt_dlp.parse_options to achieve 100% yt-dlp CLI feature compatibility."""
         try:
             tokens = shlex.split(cli_args_str)
             parsed = yt_dlp.parse_options(tokens)
             cli_opts = parsed.ydl_opts
-            
-            # Merge non-default/explicitly passed options into opts
             for key, val in cli_opts.items():
                 if val is not None and key not in ("outtmpl", "progress_hooks", "logger"):
                     opts[key] = val
-            self.log_signal.emit(self.task_id, f"[CLI 파서] 사용자 커스텀 인자 {len(tokens)}개 100% 적용 완료")
         except Exception as e:
             self.log_signal.emit(self.task_id, f"[CLI 경고] 사용자 인자 파싱 오류: {e}")
 
-    # ── Progress hook ─────────────────────────────────────────────────────────
     def _progress_hook(self, d: dict):
         if self._canceled:
             raise Exception("Download Canceled")

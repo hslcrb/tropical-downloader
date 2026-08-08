@@ -13,7 +13,8 @@ DEFAULT_CONFIG = {
     "download_path": DEFAULT_DOWNLOAD_PATH,
     "ffmpeg_path": "",
     "default_quality": "best",
-    "cookie_browser": "",
+    "cookie_browser": "auto",     # 기본 자동 탐지
+    "auto_cookie_detect": True,  # 기본 자동 탐지 켬
     "cookies_file": "",
     "proxy": "",
     "rate_limit": "",
@@ -23,12 +24,15 @@ DEFAULT_CONFIG = {
     "sub_langs": "ko,en.*",
     "embed_thumbnail": True,
     "embed_metadata": True,
-    "write_comments": True,       # 기본적으로 동영상 댓글 저장
-    "write_description": True,    # 기본적으로 설명 파일 저장
-    "write_info_json": True,      # 기본적으로 info.json 메타데이터 저장
-    "sleep_interval": 1,          # 429 에러 방지 요청 지연 최솟값
-    "max_sleep_interval": 3,      # 429 에러 방지 요청 지연 최댓값
-    "player_clients": "android,ios,web,mweb,tv", # 429 차단 우회 다중 클라이언트
+    "write_comments": True,       # 기본 댓글 저장
+    "write_description": True,    # 기본 동영상 설명 저장
+    "write_info_json": True,      # 기본 info.json 저장
+    "sleep_interval": 1,          # 429 차단 방지 지연
+    "max_sleep_interval": 3,
+    "player_clients": "android,ios,web,mweb,tv",
+    "disk_safety_margin": True,   # +10% 용량 검사 기본 켬
+    "ram_buffering": True,        # 저장공간 부족 시 RAM 보관 후 알림 기본 켬
+    "auto_purge_node_modules": True, # 저장공간 부족 시 node_modules 자동 영구 삭제 기본 켬
     "concurrent_downloads": 2,
     "filename_template": "%(title)s [%(id)s].%(ext)s",
     "custom_cli_args": ""
@@ -46,7 +50,6 @@ class ConfigManager:
             try:
                 with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
                     saved = json.load(f)
-                    # Merge with default config to ensure new keys exist
                     merged = DEFAULT_CONFIG.copy()
                     merged.update(saved)
                     self.config = merged

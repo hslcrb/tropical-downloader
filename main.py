@@ -18,9 +18,11 @@ from ui.tab_quick import QuickTab
 from ui.tab_inspector import InspectorTab
 from ui.tab_playlist import PlaylistTab
 from ui.tab_advanced import AdvancedTab
+from ui.tab_settings import SettingsTab
 from ui.tab_queue import QueueTab
 from ui.tab_history import HistoryTab
 from ui.dialogs.about_dialog import AboutDialog
+from ui.dialogs.disk_space_dialog import DiskSpaceDialog
 from ui.splash import TropicalSplashScreen
 from core.yt_worker import DownloadWorker
 
@@ -29,10 +31,11 @@ class TropicalMainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Tropical Downloader")
         self.setWindowIcon(get_app_icon())
-        self.resize(1020, 720)
-        self.setMinimumSize(900, 620)
+        self.resize(1060, 740)
+        self.setMinimumSize(920, 640)
 
         self.active_workers = {}  # task_id -> DownloadWorker
+        self.disk_dialogs = {}    # task_id -> DiskSpaceDialog
 
         self.init_ui()
 
@@ -71,12 +74,16 @@ class TropicalMainWindow(QMainWindow):
         self.tab_advanced = AdvancedTab()
         self.tabs.addTab(self.tab_advanced, get_icon("advanced", 20), "고급 yt-dlp 옵션")
 
-        # Tab 4: Queue & Progress
+        # Tab 4: Program Preferences & Settings
+        self.tab_settings = SettingsTab()
+        self.tabs.addTab(self.tab_settings, get_icon("advanced", 20), "⚙️ 설정")
+
+        # Tab 5: Queue & Progress
         self.tab_queue = QueueTab()
         self.tab_queue.cancel_task_signal.connect(self.cancel_download_job)
         self.tabs.addTab(self.tab_queue, get_icon("queue", 20), "진행상황 큐")
 
-        # Tab 5: History & Debug Logs
+        # Tab 6: History & Debug Logs
         self.tab_history = HistoryTab()
         self.tabs.addTab(self.tab_history, get_icon("history", 20), "기록 & 디버그 로그")
 
@@ -116,7 +123,6 @@ class TropicalMainWindow(QMainWindow):
         task_id = f"task_{uuid.uuid4().hex[:6]}"
         title = (self.tab_quick.current_info or {}).get("title", url)
 
-        # Inject advanced-tab options (every yt-dlp setting the user configured)
         adv_opts = {}
         try:
             adv_opts = self.tab_advanced.get_ydl_opts()
@@ -136,10 +142,21 @@ class TropicalMainWindow(QMainWindow):
         worker.log_signal.connect(self.tab_history.append_log)
         worker.finished_signal.connect(self.on_worker_finished)
         worker.error_signal.connect(self.on_worker_error)
+        worker.disk_space_required_signal.connect(self.on_disk_space_required)
 
         worker.start()
         self.tabs.setCurrentWidget(self.tab_queue)
         self.status_bar.showMessage(f"다운로드 시작: {title}")
+
+    def on_disk_space_required(self, task_id: str, dl_dir: str, req_bytes: int):
+        dlg = DiskSpaceDialog(dl_dir, req_bytes, self)
+        self.disk_dialogs[task_id] = dlg
+        dlg.accepted.connect(lambda: self._on_disk_dialog_resolved(task_id))
+        dlg.show()
+
+    def _on_disk_dialog_resolved(self, task_id: str):
+        if task_id in self.active_workers:
+            self.active_workers[task_id].notify_space_freed()
 
     def on_worker_finished(self, task_id: str, file_path: str, title: str):
         self.tab_queue.on_task_finished(task_id, file_path, title)
@@ -147,12 +164,16 @@ class TropicalMainWindow(QMainWindow):
         self.status_bar.showMessage(f"다운로드 완료: {title}")
         if task_id in self.active_workers:
             del self.active_workers[task_id]
+        if task_id in self.disk_dialogs:
+            del self.disk_dialogs[task_id]
 
     def on_worker_error(self, task_id: str, err_msg: str):
         self.tab_queue.on_task_error(task_id, err_msg)
         self.status_bar.showMessage(f"다운로드 오류: {err_msg}")
         if task_id in self.active_workers:
             del self.active_workers[task_id]
+        if task_id in self.disk_dialogs:
+            del self.disk_dialogs[task_id]
 
     def cancel_download_job(self, task_id: str):
         if task_id in self.active_workers:
@@ -160,7 +181,6 @@ class TropicalMainWindow(QMainWindow):
             self.status_bar.showMessage(f"다운로드 취소 요청됨: [{task_id}]")
 
     def on_open_about(self):
-        # Non-modal: main window stays interactive
         self._about_dlg = AboutDialog(self)
         self._about_dlg.show()
 
@@ -171,7 +191,6 @@ def main():
     app.setWindowIcon(get_app_icon())
     apply_theme(app)
 
-    # Show Splash Screen
     splash = TropicalSplashScreen()
     splash.show()
     splash.set_progress(25, "Frutiger Aero 테마 로딩 중...")
