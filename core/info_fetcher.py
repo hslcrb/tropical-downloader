@@ -1,5 +1,6 @@
 """
 Tropical Downloader - Asynchronous Media Information Fetcher Thread
+Robust handling for DPAPI cookie decryption failures with automatic fallback.
 """
 import yt_dlp
 from PySide6.QtCore import QThread, Signal
@@ -16,37 +17,53 @@ class MediaInfoWorker(QThread):
         self.url = url.strip()
 
     def run(self):
+        self.log_emitted.emit(f"Analyzing media URL: {self.url}...")
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'skip_download': True,
+            'extract_flat': False,
+            'nocheckcertificate': True,
+        }
+
+        # Add cookie settings
+        browser = config_manager.get("cookie_browser")
+        cookie_file = config_manager.get("cookies_file")
+        ydl_opts.update(get_cookie_options(browser, cookie_file))
+
+        # Add proxy settings
+        proxy = config_manager.get("proxy")
+        if proxy:
+            ydl_opts['proxy'] = proxy
+
+        info = None
+        # Primary attempt with cookies
         try:
-            self.log_emitted.emit(f"Analyzing media URL: {self.url}...")
-            ydl_opts = {
-                'quiet': True,
-                'no_warnings': True,
-                'skip_download': True,
-                'extract_flat': False,
-            }
-
-            # Add cookie settings
-            browser = config_manager.get("cookie_browser")
-            cookie_file = config_manager.get("cookies_file")
-            ydl_opts.update(get_cookie_options(browser, cookie_file))
-
-            # Add proxy settings
-            proxy = config_manager.get("proxy")
-            if proxy:
-                ydl_opts['proxy'] = proxy
-
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(self.url, download=False)
-                if not info:
-                    self.error_occurred.emit("Failed to extract media information.")
+        except Exception as primary_exc:
+            err_msg = str(primary_exc)
+            # If cookie DPAPI decryption error occurs, retry without cookies
+            if "DPAPI" in err_msg or "cookie" in err_msg.lower() or "cookies" in err_msg.lower():
+                self.log_emitted.emit("[쿠키 경고] 브라우저 DPAPI 쿠키 복호화 불가. 공개 세션으로 분석을 재시도합니다.")
+                ydl_opts.pop('cookiesfrombrowser', None)
+                ydl_opts.pop('cookiefile', None)
+                try:
+                    with yt_dlp.YoutubeDL(ydl_opts) as fallback_ydl:
+                        info = fallback_ydl.extract_info(self.url, download=False)
+                except Exception as fallback_exc:
+                    self.error_occurred.emit(str(fallback_exc))
                     return
+            else:
+                self.error_occurred.emit(err_msg)
+                return
 
-                # Normalize info dict
-                processed_info = self._process_info(info)
-                self.finished_info.emit(processed_info)
+        if not info:
+            self.error_occurred.emit("미디어 정보를 가져올 수 없습니다.")
+            return
 
-        except Exception as e:
-            self.error_occurred.emit(str(e))
+        processed_info = self._process_info(info)
+        self.finished_info.emit(processed_info)
 
     def _process_info(self, info: dict) -> dict:
         is_playlist = 'entries' in info or info.get('_type') == 'playlist'
@@ -87,7 +104,6 @@ class MediaInfoWorker(QThread):
                 fps = fmt.get("fps", 0)
                 tbr = fmt.get("tbr", 0)
 
-                # Classify stream type
                 is_video = vcodec != "none"
                 is_audio = acodec != "none"
 

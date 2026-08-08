@@ -11,10 +11,11 @@ DEFAULT_DOWNLOAD_PATH = os.path.join(os.path.expanduser("~"), "Downloads", "Trop
 
 DEFAULT_CONFIG = {
     "download_path": DEFAULT_DOWNLOAD_PATH,
+    "theme_mode": "system",       # 기본 시스템 설정을 따름 ("system" | "light" | "dark")
     "ffmpeg_path": "",
     "default_quality": "best",
     "cookie_browser": "auto",     # 기본 자동 탐지
-    "auto_cookie_detect": True,  # 기본 자동 탐지 켬
+    "auto_cookie_detect": True,   # 기본 자동 탐지 켬
     "cookies_file": "",
     "proxy": "",
     "rate_limit": "",

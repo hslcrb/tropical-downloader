@@ -13,6 +13,7 @@ from PySide6.QtCore import Qt, QTimer
 
 from styles.tropical_theme import apply_theme
 from assets.icons import get_icon, get_app_icon
+from core.config import config_manager
 from ui.header import TropicalHeader
 from ui.tab_quick import QuickTab
 from ui.tab_inspector import InspectorTab
@@ -189,7 +190,10 @@ def main():
     
     app = QApplication(sys.argv)
     app.setWindowIcon(get_app_icon())
-    apply_theme(app)
+
+    # Apply saved theme (Default is "system" mode)
+    theme_mode = config_manager.get("theme_mode", "system")
+    apply_theme(app, theme_mode)
 
     splash = TropicalSplashScreen()
     splash.show()

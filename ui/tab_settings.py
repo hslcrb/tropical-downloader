@@ -1,22 +1,24 @@
 """
 Tropical Downloader - Main Preferences & Settings Tab (⚙️ 설정)
-Includes Browser Cookie Auto-Detection, Disk Safety (+10%), RAM Buffering, and Auto-purge node_modules settings.
+Includes Theme Selection (Light / Dark / System Auto), Browser Cookie Detection,
+Disk Safety (+10%), RAM Buffering, and Auto-purge node_modules settings.
 """
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox,
-    QCheckBox, QGroupBox, QPushButton, QFileDialog, QScrollArea, QFrame, QSpinBox
+    QCheckBox, QGroupBox, QPushButton, QFileDialog, QScrollArea, QFrame, QSpinBox, QApplication
 )
 from PySide6.QtCore import Signal
 from assets.icons import get_icon
 from core.config import config_manager
 from core.cookie_manager import detect_available_browsers
+from styles.tropical_theme import apply_theme
 
 def _row(label_text: str, widget, hint: str = "") -> QHBoxLayout:
     row = QHBoxLayout()
     row.setSpacing(8)
     lbl = QLabel(label_text)
     lbl.setFixedWidth(180)
-    lbl.setStyleSheet("color: #334155; font-size: 12px; font-weight: 600;")
+    lbl.setStyleSheet("font-size: 12px; font-weight: 600;")
     row.addWidget(lbl)
     row.addWidget(widget, stretch=1)
     if hint:
@@ -46,7 +48,24 @@ class SettingsTab(QWidget):
         layout.setContentsMargins(16, 16, 16, 16)
         layout.setSpacing(14)
 
-        # ── 1. 저장공간 모니터링 & node_modules 자동 정산 정책 ─────
+        # ── 1. 화면 테마 설정 (다크모드 / 시스템 모드) ───────────────
+        grp_theme = QGroupBox("화면 테마 설정")
+        g_theme = QVBoxLayout(grp_theme)
+
+        self.combo_theme = QComboBox()
+        self.combo_theme.addItem("시스템 설정 따름 (자동)", "system")
+        self.combo_theme.addItem("라이트 모드 (Tropical Day)", "light")
+        self.combo_theme.addItem("다크 모드 (Tropical Night)", "dark")
+
+        cur_theme = config_manager.get("theme_mode", "system")
+        idx_theme = self.combo_theme.findData(cur_theme)
+        if idx_theme >= 0:
+            self.combo_theme.setCurrentIndex(idx_theme)
+
+        g_theme.addLayout(_row("테마 모드:", self.combo_theme, "기본값은 운영체제 다크모드 설정을 자동 추종합니다."))
+        layout.addWidget(grp_theme)
+
+        # ── 2. 저장공간 모니터링 & node_modules 자동 정산 정책 ─────
         grp_disk = QGroupBox("저장공간 모니터링 & RAM 보관 정책")
         g_disk = QVBoxLayout(grp_disk)
 
@@ -70,7 +89,7 @@ class SettingsTab(QWidget):
 
         layout.addWidget(grp_disk)
 
-        # ── 2. 브라우저 쿠키 자동 감지 ──────────────────────────────
+        # ── 3. 브라우저 쿠키 자동 감지 ──────────────────────────────
         grp_cookie = QGroupBox("브라우저 쿠키 자동 연동 (429 차단 우회)")
         g_cookie = QVBoxLayout(grp_cookie)
 
@@ -101,7 +120,7 @@ class SettingsTab(QWidget):
 
         layout.addWidget(grp_cookie)
 
-        # ── 3. 기본 다운로드 & 메타데이터 ───────────────────────────
+        # ── 4. 기본 다운로드 & 메타데이터 ───────────────────────────
         grp_default = QGroupBox("기본 다운로드 & 메타데이터 자동 저장")
         g_def = QVBoxLayout(grp_default)
 
@@ -131,7 +150,7 @@ class SettingsTab(QWidget):
 
         layout.addWidget(grp_default)
 
-        # ── 4. 429 차단 방지 지연 설정 ──────────────────────────────
+        # ── 5. 429 차단 방지 지연 설정 ──────────────────────────────
         grp_429 = QGroupBox("429 Too Many Requests 요청 지연 설정")
         g_429 = QVBoxLayout(grp_429)
 
@@ -154,7 +173,7 @@ class SettingsTab(QWidget):
 
         # Save Bar
         bar = QFrame()
-        bar.setStyleSheet("background:#FFFFFF; border-top:1px solid #BAE6FD;")
+        bar.setStyleSheet("border-top: 1px solid #BAE6FD;")
         bar_layout = QHBoxLayout(bar)
         bar_layout.setContentsMargins(16, 8, 16, 8)
         bar_layout.addStretch()
@@ -181,6 +200,14 @@ class SettingsTab(QWidget):
 
     def save_settings(self):
         cfg = config_manager
+        theme_mode = self.combo_theme.currentData()
+        cfg.set("theme_mode", theme_mode)
+        
+        # Apply theme dynamically
+        app = QApplication.instance()
+        if app:
+            apply_theme(app, theme_mode)
+
         cfg.set("disk_safety_margin", self.chk_disk_safety_margin.isChecked())
         cfg.set("ram_buffering", self.chk_ram_buffering.isChecked())
         cfg.set("auto_purge_node_modules", self.chk_auto_purge_node_modules.isChecked())
