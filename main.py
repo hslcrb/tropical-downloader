@@ -35,12 +35,12 @@ from core.yt_worker import DownloadWorker
 # -----------------------------------------------------------------------------
 def global_exception_hook(exctype, value, tb):
     err_msg = "".join(traceback.format_exception(exctype, value, tb))
-    print(f"🔥 [CRASH-PROOF ENGINE] Uncaught Exception Intercepted:\n{err_msg}")
+    print(f"[CRASH-PROOF ENGINE] Uncaught Exception Intercepted:\n{err_msg}")
     try:
         if QApplication.instance():
             for widget in QApplication.topLevelWidgets():
                 if isinstance(widget, TropicalMainWindow):
-                    widget.status_bar.showMessage(f"⚠️ 시스템 알림: {value}")
+                    widget.status_bar.showMessage(f"시스템 알림: {value}")
                     break
     except Exception:
         pass

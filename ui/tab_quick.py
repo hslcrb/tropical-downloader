@@ -86,8 +86,13 @@ class PresetCard(QAbstractButton):
             self._sub.setStyleSheet("color: #64748B; background: transparent;")
 
     def paintEvent(self, e):
-        # Let child widgets paint themselves; no custom paint needed.
-        super().paintEvent(e)
+        from PySide6.QtWidgets import QStyleOptionButton, QStyle
+        from PySide6.QtGui import QPainter
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+        p = QPainter(self)
+        self.style().drawControl(QStyle.CE_PushButton, opt, p, self)
+
 
 
 class QuickTab(QWidget):
