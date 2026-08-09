@@ -118,7 +118,8 @@ class QueueTab(QWidget):
         act_layout.setContentsMargins(0, 0, 0, 0)
         act_layout.setSpacing(4)
 
-        btn_inapp = QPushButton("🎬")
+        btn_inapp = QPushButton()
+        btn_inapp.setIcon(get_icon("quick", 16))
         btn_inapp.setFixedSize(28, 28)
         btn_inapp.setToolTip("인앱 플레이어로 열기/편집")
         btn_inapp.clicked.connect(lambda: self.open_in_player(file_path))

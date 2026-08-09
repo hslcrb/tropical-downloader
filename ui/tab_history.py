@@ -111,7 +111,7 @@ class HistoryTab(QWidget):
             act_layout.setSpacing(4)
 
             btn_player = QPushButton()
-            btn_player.setText("🎬")
+            btn_player.setIcon(get_icon("quick", 16))
             btn_player.setFixedSize(28, 28)
             btn_player.setToolTip("인앱 플레이어로 열기/편집")
             btn_player.clicked.connect(lambda _, p=fpath: self.open_in_player(p))

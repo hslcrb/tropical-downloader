@@ -110,13 +110,13 @@ class TropicalMainWindow(QMainWindow):
             self.tab_playlist.start_playlist_download.connect(self.start_download_job)
 
         # Tab 3: In-App Player & Subtitle/JSON Editor (NEW!)
-        self.tab_player = safe_add_tab(PlayerTab, "quick", "🎬 플레이어 & 에디터", "tab_player")
+        self.tab_player = safe_add_tab(PlayerTab, "quick", "플레이어 & 에디터", "tab_player")
 
         # Tab 4: Advanced Options
         self.tab_advanced = safe_add_tab(AdvancedTab, "advanced", "고급 yt-dlp 옵션", "tab_advanced")
 
         # Tab 5: Program Preferences & Settings
-        self.tab_settings = safe_add_tab(SettingsTab, "advanced", "⚙️ 설정", "tab_settings")
+        self.tab_settings = safe_add_tab(SettingsTab, "advanced", "설정", "tab_settings")
 
         # Tab 6: Queue & Progress
         self.tab_queue = safe_add_tab(QueueTab, "queue", "진행상황 큐", "tab_queue")
@@ -131,7 +131,7 @@ class TropicalMainWindow(QMainWindow):
 
         # 3. Status Bar
         self.status_bar = QStatusBar()
-        self.status_bar.showMessage("🌴 트로피컬 다운로더 준비 완료. URL을 입력하세요.")
+        self.status_bar.showMessage("트로피컬 다운로더 준비 완료. URL을 입력하세요.")
         self.setStatusBar(self.status_bar)
 
     def open_in_player(self, file_path: str):

@@ -1,5 +1,5 @@
 """
-Tropical Downloader - Main Preferences & Settings Tab (⚙️ 설정)
+Tropical Downloader - Main Preferences & Settings Tab (설정)
 Includes Theme Selection (Light / Dark / System Auto), Browser Cookie Detection,
 Disk Safety (+10%), RAM Buffering, and Auto-purge node_modules settings.
 """
