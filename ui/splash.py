@@ -20,6 +20,7 @@ class TropicalSplashScreen(QSplashScreen):
     def init_ui(self):
         self.container = QFrame(self)
         self.container.setFixedSize(460, 260)
+        self.container.move(20, 20)
         self.container.setStyleSheet("""
             QFrame {
                 background-color: #0F172A;

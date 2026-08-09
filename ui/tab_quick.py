@@ -31,12 +31,15 @@ class ThumbnailLoader(QThread):
             pass
 
 
-class PresetCard(QPushButton):
-    """Clickable preset card — replaces radio buttons to avoid Korean font clipping."""
+class PresetCard(QFrame):
+    """Clickable preset card frame — eliminates PySide6 button layout rendering overlap."""
+    clicked = Signal(int)
 
-    def __init__(self, title: str, subtitle: str, parent=None):
+    def __init__(self, pid: int, title: str, subtitle: str, parent=None):
         super().__init__(parent)
-        self.setCheckable(True)
+        self.pid = pid
+        self._checked = False
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         layout = QVBoxLayout(self)
@@ -46,18 +49,29 @@ class PresetCard(QPushButton):
         self._title = QLabel(title)
         self._title.setFont(QFont("Segoe UI", 13, QFont.Weight.DemiBold))
         self._title.setWordWrap(True)
-        self._title.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
+        self._title.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
         self._sub = QLabel(subtitle)
         self._sub.setFont(QFont("Segoe UI", 11))
         self._sub.setWordWrap(True)
-        self._sub.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
+        self._sub.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
         layout.addWidget(self._title)
         layout.addWidget(self._sub)
 
         self._update_style(False)
-        self.toggled.connect(self._update_style)
+
+    def setChecked(self, checked: bool):
+        self._checked = checked
+        self._update_style(checked)
+
+    def isChecked(self) -> bool:
+        return self._checked
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.clicked.emit(self.pid)
+        super().mousePressEvent(event)
 
     def _update_style(self, checked: bool):
         if checked:
@@ -66,7 +80,6 @@ class PresetCard(QPushButton):
                     background-color: #E0F2FE;
                     border: 2px solid #0EA5E9;
                     border-radius: 10px;
-                    text-align: left;
                 }
             """)
             self._title.setStyleSheet("color: #0284C7; background: transparent;")
@@ -77,7 +90,6 @@ class PresetCard(QPushButton):
                     background-color: #FFFFFF;
                     border: 1.5px solid #BAE6FD;
                     border-radius: 10px;
-                    text-align: left;
                 }
                 PresetCard:hover {
                     background-color: #F0F9FF;
@@ -114,9 +126,8 @@ class QuickTab(QWidget):
         self.current_info = None
         self.thumb_worker = None
         self.info_worker = None
-        self._cards: list[PresetCard] = []
-        self._card_group = QButtonGroup(self)
-        self._card_group.setExclusive(True)
+        self._selected_pid = 0
+        self._cards: dict[int, PresetCard] = {}
         self.init_ui()
 
     def init_ui(self):
@@ -169,13 +180,13 @@ class QuickTab(QWidget):
         grid_layout = QVBoxLayout()
         grid_layout.setSpacing(6)
 
-        for idx, (pid, title, sub, _) in enumerate(self.PRESETS):
-            card = PresetCard(title, sub)
-            self._card_group.addButton(card, pid)
-            self._cards.append(card)
+        for pid, title, sub, _ in self.PRESETS:
+            card = PresetCard(pid, title, sub)
+            card.clicked.connect(self._on_card_selected)
+            self._cards[pid] = card
             grid_layout.addWidget(card)
 
-        self._cards[0].setChecked(True)
+        self._on_card_selected(0)
         layout.addLayout(grid_layout)
 
         # ── Save path row ───────────────────────────────────────────
@@ -212,6 +223,11 @@ class QuickTab(QWidget):
         layout.addWidget(self.dl_btn)
 
         layout.addStretch()
+
+    def _on_card_selected(self, pid: int):
+        self._selected_pid = pid
+        for p, card in self._cards.items():
+            card.setChecked(p == pid)
 
     # ── Async metadata fetch ────────────────────────────────────────
     def analyze_url(self, url: str):
@@ -263,7 +279,7 @@ class QuickTab(QWidget):
             self.status_lbl.setText("먼저 URL을 입력해 주세요.")
             return
 
-        pid = self._card_group.checkedId()
+        pid = self._selected_pid
         _, _, _, base_params = self.PRESETS[pid] if 0 <= pid < len(self.PRESETS) else self.PRESETS[0]
 
         params = {"url": url, "download_path": self.path_lbl.text(), "extract_audio": False}

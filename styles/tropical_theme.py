@@ -55,8 +55,11 @@ QGroupBox {
     background-color: #FFFFFF;
     border: 1px solid #BAE6FD;
     border-radius: 10px;
-    margin-top: 22px;
-    padding: 12px 14px 10px 14px;
+    margin-top: 24px;
+    padding-top: 16px;
+    padding-right: 14px;
+    padding-bottom: 10px;
+    padding-left: 14px;
     font-weight: 700;
     font-size: 12px;
     color: #0369A1;
@@ -65,6 +68,7 @@ QGroupBox {
 QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top left;
+    top: 4px;
     left: 12px;
     padding: 2px 8px;
     background-color: #E0F2FE;
@@ -176,8 +180,8 @@ QPushButton#btn_ghost:hover { background-color: #E0F2FE; }
 QTabWidget::pane {
     background-color: #FFFFFF;
     border: 1px solid #BAE6FD;
-    border-radius: 10px;
-    top: -1px;
+    border-radius: 0 0 10px 10px;
+    top: 0px;
     padding: 12px;
 }
 QTabBar::tab {
@@ -189,6 +193,7 @@ QTabBar::tab {
     border-bottom: 2.5px solid transparent;
     padding: 9px 16px 8px 16px;
     margin-right: 4px;
+    min-width: 80px;
 }
 QTabBar::tab:selected {
     color: #0284C7;
@@ -270,8 +275,11 @@ QGroupBox {
     background-color: #1C2541;
     border: 1px solid #334155;
     border-radius: 10px;
-    margin-top: 22px;
-    padding: 12px 14px 10px 14px;
+    margin-top: 24px;
+    padding-top: 16px;
+    padding-right: 14px;
+    padding-bottom: 10px;
+    padding-left: 14px;
     font-weight: 700;
     font-size: 12px;
     color: #38BDF8;
@@ -280,6 +288,7 @@ QGroupBox {
 QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top left;
+    top: 4px;
     left: 12px;
     padding: 2px 8px;
     background-color: #0F172A;
@@ -391,8 +400,8 @@ QPushButton#btn_ghost:hover { background-color: #1E293B; }
 QTabWidget::pane {
     background-color: #1C2541;
     border: 1px solid #334155;
-    border-radius: 10px;
-    top: -1px;
+    border-radius: 0 0 10px 10px;
+    top: 0px;
     padding: 12px;
 }
 QTabBar::tab {
@@ -404,6 +413,7 @@ QTabBar::tab {
     border-bottom: 2.5px solid transparent;
     padding: 9px 16px 8px 16px;
     margin-right: 4px;
+    min-width: 80px;
 }
 QTabBar::tab:selected {
     color: #38BDF8;

@@ -84,7 +84,7 @@ class TropicalHeader(QFrame):
         right.setSpacing(8)
 
         ffmpeg_ok = shutil.which("ffmpeg") is not None
-        badge = QLabel("FFmpeg ✓" if ffmpeg_ok else "FFmpeg ✗")
+        badge = QLabel("FFmpeg [연동 완료]" if ffmpeg_ok else "FFmpeg [미설치]")
         badge.setStyleSheet(
             f"background-color:{'#0EA5E9' if ffmpeg_ok else '#EF4444'};"
             "color:#FFFFFF; font-size:11px; font-weight:700;"
