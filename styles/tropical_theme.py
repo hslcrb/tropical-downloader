@@ -478,3 +478,14 @@ def apply_theme(app, theme_mode: str = "system"):
     if app:
         qss = get_theme_qss(theme_mode)
         app.setStyleSheet(qss)
+
+TROPICAL_COLORS = {
+    "cyan": "#00E5FF",
+    "emerald": "#06D6A0",
+    "yellow": "#FFD166",
+    "coral": "#FF6B6B",
+    "bg_dark": "#0B132B",
+    "card_dark": "#1C2541",
+    "text_light": "#F8FAFC"
+}
+
