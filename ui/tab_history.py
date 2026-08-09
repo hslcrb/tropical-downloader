@@ -110,6 +110,13 @@ class HistoryTab(QWidget):
             act_layout.setContentsMargins(0, 0, 0, 0)
             act_layout.setSpacing(4)
 
+            btn_player = QPushButton()
+            btn_player.setText("🎬")
+            btn_player.setFixedSize(28, 28)
+            btn_player.setToolTip("인앱 플레이어로 열기/편집")
+            btn_player.clicked.connect(lambda _, p=fpath: self.open_in_player(p))
+            act_layout.addWidget(btn_player)
+
             btn_folder = QPushButton()
             btn_folder.setIcon(get_icon("folder", 16))
             btn_folder.setFixedSize(28, 28)
@@ -118,6 +125,13 @@ class HistoryTab(QWidget):
             act_layout.addWidget(btn_folder)
 
             self.table.setCellWidget(idx, 5, action_widget)
+
+    def open_in_player(self, path: str):
+        if not path:
+            return
+        parent = self.window()
+        if hasattr(parent, "open_in_player"):
+            parent.open_in_player(path)
 
     def append_log(self, task_id: str, line: str):
         self.log_console.append(f"[{task_id}] {line}")

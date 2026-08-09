@@ -112,11 +112,17 @@ class QueueTab(QWidget):
         self.task_data[task_id]["path"] = file_path
         self.task_data[task_id]["status"] = "FINISHED"
 
-        # Replace action buttons with Open Folder / Play
+        # Replace action buttons with Open Folder / In-App Player / External Play
         action_widget = QWidget()
         act_layout = QHBoxLayout(action_widget)
         act_layout.setContentsMargins(0, 0, 0, 0)
         act_layout.setSpacing(4)
+
+        btn_inapp = QPushButton("🎬")
+        btn_inapp.setFixedSize(28, 28)
+        btn_inapp.setToolTip("인앱 플레이어로 열기/편집")
+        btn_inapp.clicked.connect(lambda: self.open_in_player(file_path))
+        act_layout.addWidget(btn_inapp)
 
         btn_folder = QPushButton()
         btn_folder.setIcon(get_icon("folder", 16))
@@ -128,11 +134,18 @@ class QueueTab(QWidget):
         btn_play = QPushButton()
         btn_play.setIcon(get_icon("play", 16))
         btn_play.setFixedSize(28, 28)
-        btn_play.setToolTip("파일 실행/재생")
+        btn_play.setToolTip("외부 미디어 플레이어로 실행")
         btn_play.clicked.connect(lambda: self.open_file(file_path))
         act_layout.addWidget(btn_play)
 
         self.table.setCellWidget(row, 6, action_widget)
+
+    def open_in_player(self, path: str):
+        if not path:
+            return
+        parent = self.window()
+        if hasattr(parent, "open_in_player"):
+            parent.open_in_player(path)
 
     def on_task_error(self, task_id: str, err_msg: str):
         if task_id not in self.tasks:
