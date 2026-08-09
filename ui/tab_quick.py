@@ -31,7 +31,7 @@ class ThumbnailLoader(QThread):
             pass
 
 
-class PresetCard(QAbstractButton):
+class PresetCard(QPushButton):
     """Clickable preset card — replaces radio buttons to avoid Korean font clipping."""
 
     def __init__(self, title: str, subtitle: str, parent=None):
@@ -66,6 +66,7 @@ class PresetCard(QAbstractButton):
                     background-color: #E0F2FE;
                     border: 2px solid #0EA5E9;
                     border-radius: 10px;
+                    text-align: left;
                 }
             """)
             self._title.setStyleSheet("color: #0284C7; background: transparent;")
@@ -76,6 +77,7 @@ class PresetCard(QAbstractButton):
                     background-color: #FFFFFF;
                     border: 1.5px solid #BAE6FD;
                     border-radius: 10px;
+                    text-align: left;
                 }
                 PresetCard:hover {
                     background-color: #F0F9FF;
@@ -85,13 +87,6 @@ class PresetCard(QAbstractButton):
             self._title.setStyleSheet("color: #1E293B; background: transparent;")
             self._sub.setStyleSheet("color: #64748B; background: transparent;")
 
-    def paintEvent(self, e):
-        from PySide6.QtWidgets import QStyleOptionButton, QStyle
-        from PySide6.QtGui import QPainter
-        opt = QStyleOptionButton()
-        self.initStyleOption(opt)
-        p = QPainter(self)
-        self.style().drawControl(QStyle.CE_PushButton, opt, p, self)
 
 
 
