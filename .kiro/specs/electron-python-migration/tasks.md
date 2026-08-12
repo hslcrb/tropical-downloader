@@ -4,124 +4,124 @@
 
 ### 1.1 Project Setup and Structure
 
-- [x] 1.1.1 FastAPI 프로젝트 구조 생성 (main.py, services/, models/, core/, tests/)
-- [x] 1.1.2 requirements.txt 작성 (FastAPI, Uvicorn, yt-dlp, Pydantic, python-socketio)
-- [~] 1.1.3 Python 가상 환경 설정 및 의존성 설치
-- [~] 1.1.4 .env 파일 및 환경 변수 설정
-- [~] 1.1.5 로깅 시스템 설정 (RotatingFileHandler)
+- [x] 1.1.1 FastAPI ?�로?�트 구조 ?�성 (main.py, services/, models/, core/, tests/)
+- [x] 1.1.2 requirements.txt ?�성 (FastAPI, Uvicorn, yt-dlp, Pydantic, python-socketio)
+- [x] 1.1.3 Python 가???�경 ?�정 �??�존???�치
+- [x] 1.1.4 .env ?�일 �??�경 변???�정
+- [x] 1.1.5 로깅 ?�스???�정 (RotatingFileHandler)
 
 ### 1.2 Core FastAPI Application
 
-- [~] 1.2.1 FastAPI 앱 초기화 및 CORS 미들웨어 설정
-- [~] 1.2.2 Pydantic 모델 정의 (AnalyzeRequest, DownloadRequest, MediaMetadataResponse, TaskStatusResponse 등)
-- [~] 1.2.3 전역 예외 핸들러 구현 (ValidationError, General Exception)
-- [~] 1.2.4 헬스 체크 엔드포인트 구현 (GET /)
-- [~] 1.2.5 API 문서 자동 생성 확인 (/docs)
+- [x] 1.2.1 FastAPI ??초기??�?CORS 미들?�어 ?�정
+- [x] 1.2.2 Pydantic 모델 ?�의 (AnalyzeRequest, DownloadRequest, MediaMetadataResponse, TaskStatusResponse ??
+- [x] 1.2.3 ?�역 ?�외 ?�들??구현 (ValidationError, General Exception)
+- [x] 1.2.4 ?�스 체크 ?�드?�인??구현 (GET /)
+- [x] 1.2.5 API 문서 ?�동 ?�성 ?�인 (/docs)
 
 ### 1.3 Core Modules Porting
 
-- [~] 1.3.1 cookie_manager.py 포팅 (브라우저 감지, 쿠키 옵션 생성)
-- [~] 1.3.2 history_manager.py 포팅 (JSON 기반 히스토리 저장/로드)
-- [~] 1.3.3 disk_manager.py 포팅 (디스크 공간 체크, node_modules 삭제)
-- [~] 1.3.4 config_manager.py 리팩토링 (PySide6 의존성 제거)
-- [~] 1.3.5 기존 코어 모듈 유닛 테스트 작성
+- [x] 1.3.1 cookie_manager.py ?�팅 (브라?��? 감�?, 쿠키 ?�션 ?�성)
+- [x] 1.3.2 history_manager.py ?�팅 (JSON 기반 ?�스?�리 ?�??로드)
+- [x] 1.3.3 disk_manager.py ?�팅 (?�스??공간 체크, node_modules ??��)
+- [x] 1.3.4 config_manager.py 리팩?�링 (PySide6 ?�존???�거)
+- [x] 1.3.5 기존 코어 모듈 ?�닛 ?�스???�성
 
 ### 1.4 Info Fetcher Service
 
-- [~] 1.4.1 InfoFetcherService 클래스 구현 (fetch_info 메서드)
-- [~] 1.4.2 yt-dlp를 사용한 메타데이터 추출 로직
-- [~] 1.4.3 DPAPI 쿠키 오류 자동 재시도 로직
-- [~] 1.4.4 플레이리스트 감지 및 파싱
-- [~] 1.4.5 `/api/analyze` 엔드포인트 구현
-- [~] 1.4.6 InfoFetcherService 유닛 테스트 (단일 비디오, 플레이리스트, 에러 처리)
+- [x] 1.4.1 InfoFetcherService ?�래??구현 (fetch_info 메서??
+- [x] 1.4.2 yt-dlp�??�용??메�??�이??추출 로직
+- [x] 1.4.3 DPAPI 쿠키 ?�류 ?�동 ?�시??로직
+- [x] 1.4.4 ?�레?�리?�트 감�? �??�싱
+- [x] 1.4.5 `/api/analyze` ?�드?�인??구현
+- [x] 1.4.6 InfoFetcherService ?�닛 ?�스??(?�일 비디?? ?�레?�리?�트, ?�러 처리)
 
 ### 1.5 Download Service - Part 1 (Core)
 
-- [~] 1.5.1 DownloadService 클래스 및 DownloadTask 모델 구현
-- [~] 1.5.2 작업 ID 생성 및 작업 큐 관리
-- [~] 1.5.3 ThreadPoolExecutor를 사용한 비동기 다운로드 실행
-- [~] 1.5.4 yt-dlp 옵션 빌더 (_build_ydl_opts 메서드)
-- [~] 1.5.5 진행상황 콜백 (_progress_hook) 구현
-- [~] 1.5.6 `/api/download` 엔드포인트 구현 (다운로드 시작)
+- [x] 1.5.1 DownloadService ?�래??�?DownloadTask 모델 구현
+- [x] 1.5.2 ?�업 ID ?�성 �??�업 ??관�?
+- [x] 1.5.3 ThreadPoolExecutor�??�용??비동�??�운로드 ?�행
+- [x] 1.5.4 yt-dlp ?�션 빌더 (_build_ydl_opts 메서??
+- [x] 1.5.5 진행?�황 콜백 (_progress_hook) 구현
+- [x] 1.5.6 `/api/download` ?�드?�인??구현 (?�운로드 ?�작)
 
 ### 1.6 Download Service - Part 2 (Control)
 
-- [~] 1.6.1 `/api/download/{task_id}` 엔드포인트 구현 (상태 조회)
-- [~] 1.6.2 `/api/download/{task_id}/pause` 엔드포인트 구현 (일시정지)
-- [~] 1.6.3 `/api/download/{task_id}/resume` 엔드포인트 구현 (재개)
-- [~] 1.6.4 `/api/download/{task_id}/cancel` 엔드포인트 구현 (취소 및 임시 파일 삭제)
-- [~] 1.6.5 `/api/download/{task_id}/retry` 엔드포인트 구현 (재시도)
-- [~] 1.6.6 `/api/tasks` 엔드포인트 구현 (모든 활성 작업 목록)
+- [x] 1.6.1 `/api/download/{task_id}` ?�드?�인??구현 (?�태 조회)
+- [x] 1.6.2 `/api/download/{task_id}/pause` ?�드?�인??구현 (?�시?��?)
+- [x] 1.6.3 `/api/download/{task_id}/resume` ?�드?�인??구현 (?�개)
+- [x] 1.6.4 `/api/download/{task_id}/cancel` ?�드?�인??구현 (취소 �??�시 ?�일 ??��)
+- [x] 1.6.5 `/api/download/{task_id}/retry` ?�드?�인??구현 (?�시??
+- [x] 1.6.6 `/api/tasks` ?�드?�인??구현 (모든 ?�성 ?�업 목록)
 
 ### 1.7 Download Service - Part 3 (Playlist)
 
-- [~] 1.7.1 플레이리스트 일괄 다운로드 로직 (download_playlist 메서드)
-- [~] 1.7.2 범위 파싱 (예: "1-10" → [1, 2, ..., 10])
-- [~] 1.7.3 개별 작업 생성 및 고유 task_id 할당
-- [~] 1.7.4 파일명 템플릿 적용 (%(playlist_index)s, %(title)s 등)
-- [~] 1.7.5 `/api/playlist/download` 엔드포인트 구현
-- [~] 1.7.6 플레이리스트 다운로드 유닛 테스트
+- [x] 1.7.1 ?�레?�리?�트 ?�괄 ?�운로드 로직 (download_playlist 메서??
+- [x] 1.7.2 범위 ?�싱 (?? "1-10" ??[1, 2, ..., 10])
+- [x] 1.7.3 개별 ?�업 ?�성 �?고유 task_id ?�당
+- [x] 1.7.4 ?�일�??�플�??�용 (%(playlist_index)s, %(title)s ??
+- [x] 1.7.5 `/api/playlist/download` ?�드?�인??구현
+- [x] 1.7.6 ?�레?�리?�트 ?�운로드 ?�닛 ?�스??
 
 ### 1.8 WebSocket Service
 
-- [~] 1.8.1 WebSocketService 클래스 구현 (연결 관리)
-- [~] 1.8.2 `/ws` WebSocket 엔드포인트 구현
-- [~] 1.8.3 진행상황 브로드캐스트 (broadcast_progress)
-- [~] 1.8.4 로그 메시지 브로드캐스트 (broadcast_log)
-- [~] 1.8.5 작업 완료/에러 알림 메시지
-- [~] 1.8.6 WebSocket 연결 유지 및 재연결 처리
-- [~] 1.8.7 WebSocket 통신 통합 테스트
+- [x] 1.8.1 WebSocketService ?�래??구현 (?�결 관�?
+- [x] 1.8.2 `/ws` WebSocket ?�드?�인??구현
+- [x] 1.8.3 진행?�황 브로?�캐?�트 (broadcast_progress)
+- [x] 1.8.4 로그 메시지 브로?�캐?�트 (broadcast_log)
+- [x] 1.8.5 ?�업 ?�료/?�러 ?�림 메시지
+- [x] 1.8.6 WebSocket ?�결 ?��? �??�연�?처리
+- [x] 1.8.7 WebSocket ?�신 ?�합 ?�스??
 
 ### 1.9 History Service
 
-- [~] 1.9.1 HistoryService 클래스 구현
-- [~] 1.9.2 `/api/history` GET 엔드포인트 구현 (조회, 검색)
-- [~] 1.9.3 히스토리 검색 필터링 로직 (제목, URL 기반)
-- [~] 1.9.4 `/api/history` DELETE 엔드포인트 구현 (전체 삭제)
-- [~] 1.9.5 다운로드 완료 시 히스토리 자동 저장 통합
-- [~] 1.9.6 History Service 유닛 테스트
+- [x] 1.9.1 HistoryService ?�래??구현
+- [x] 1.9.2 `/api/history` GET ?�드?�인??구현 (조회, 검??
+- [x] 1.9.3 ?�스?�리 검???�터�?로직 (?�목, URL 기반)
+- [x] 1.9.4 `/api/history` DELETE ?�드?�인??구현 (?�체 ??��)
+- [x] 1.9.5 ?�운로드 ?�료 ???�스?�리 ?�동 ?�???�합
+- [x] 1.9.6 History Service ?�닛 ?�스??
 
 ### 1.10 File System Service
 
-- [~] 1.10.1 FileService 클래스 구현
-- [~] 1.10.2 `/api/files` GET 엔드포인트 (다운로드 폴더 파일 목록)
-- [~] 1.10.3 `/api/files` DELETE 엔드포인트 (파일 삭제)
-- [~] 1.10.4 `/api/disk-space` GET 엔드포인트 (디스크 공간 조회)
-- [~] 1.10.5 디스크 공간 부족 시 경고 로직
-- [~] 1.10.6 File Service 유닛 테스트
+- [x] 1.10.1 FileService ?�래??구현
+- [x] 1.10.2 `/api/files` GET ?�드?�인??(?�운로드 ?�더 ?�일 목록)
+- [x] 1.10.3 `/api/files` DELETE ?�드?�인??(?�일 ??��)
+- [x] 1.10.4 `/api/disk-space` GET ?�드?�인??(?�스??공간 조회)
+- [x] 1.10.5 ?�스??공간 부�???경고 로직
+- [x] 1.10.6 File Service ?�닛 ?�스??
 
 ### 1.11 Config Service
 
-- [~] 1.11.1 ConfigService 클래스 구현
-- [~] 1.11.2 `/api/config` GET 엔드포인트 (설정 조회)
-- [~] 1.11.3 `/api/config` PUT 엔드포인트 (설정 업데이트)
-- [~] 1.11.4 설정 파일 JSON 저장/로드
-- [~] 1.11.5 기본 설정값 정의
-- [~] 1.11.6 Config Service 유닛 테스트
+- [x] 1.11.1 ConfigService ?�래??구현
+- [x] 1.11.2 `/api/config` GET ?�드?�인??(?�정 조회)
+- [x] 1.11.3 `/api/config` PUT ?�드?�인??(?�정 ?�데?�트)
+- [x] 1.11.4 ?�정 ?�일 JSON ?�??로드
+- [x] 1.11.5 기본 ?�정�??�의
+- [x] 1.11.6 Config Service ?�닛 ?�스??
 
 ### 1.12 Cookie Service
 
-- [~] 1.12.1 CookieService 클래스 구현
-- [~] 1.12.2 `/api/browsers` GET 엔드포인트 (설치된 브라우저 감지)
-- [~] 1.12.3 브라우저별 프로필 경로 검색
-- [~] 1.12.4 자동 감지 로직 (최적 브라우저 선택)
-- [~] 1.12.5 Cookie Service 유닛 테스트
+- [x] 1.12.1 CookieService ?�래??구현
+- [x] 1.12.2 `/api/browsers` GET ?�드?�인??(?�치??브라?��? 감�?)
+- [x] 1.12.3 브라?��?�??�로??경로 검??
+- [x] 1.12.4 ?�동 감�? 로직 (최적 브라?��? ?�택)
+- [x] 1.12.5 Cookie Service ?�닛 ?�스??
 
 ### 1.13 Backend Integration Tests
 
-- [~] 1.13.1 API 엔드포인트 통합 테스트 작성 (TestClient 사용)
-- [~] 1.13.2 분석 → 다운로드 → 완료 전체 플로우 테스트
-- [~] 1.13.3 플레이리스트 일괄 다운로드 통합 테스트
-- [~] 1.13.4 에러 시나리오 통합 테스트 (잘못된 URL, 네트워크 오류 등)
-- [~] 1.13.5 WebSocket 실시간 업데이트 통합 테스트
+- [x] 1.13.1 API ?�드?�인???�합 ?�스???�성 (TestClient ?�용)
+- [x] 1.13.2 분석 ???�운로드 ???�료 ?�체 ?�로???�스??
+- [x] 1.13.3 ?�레?�리?�트 ?�괄 ?�운로드 ?�합 ?�스??
+- [x] 1.13.4 ?�러 ?�나리오 ?�합 ?�스??(?�못??URL, ?�트?�크 ?�류 ??
+- [x] 1.13.5 WebSocket ?�시�??�데?�트 ?�합 ?�스??
 
 ### 1.14 Backend Performance & Security
 
-- [~] 1.14.1 Rate Limiting 미들웨어 추가 (slowapi)
-- [~] 1.14.2 보안 헤더 추가 (X-Content-Type-Options, X-Frame-Options 등)
-- [~] 1.14.3 로그 민감 정보 마스킹 (쿠키, 비밀번호)
-- [~] 1.14.4 동시 다운로드 제한 설정 (MAX_CONCURRENT_DOWNLOADS)
-- [~] 1.14.5 성능 테스트 (동시 요청 처리)
+- [x] 1.14.1 Rate Limiting 미들?�어 추�? (slowapi)
+- [x] 1.14.2 보안 ?�더 추�? (X-Content-Type-Options, X-Frame-Options ??
+- [x] 1.14.3 로그 민감 ?�보 마스??(쿠키, 비�?번호)
+- [x] 1.14.4 ?�시 ?�운로드 ?�한 ?�정 (MAX_CONCURRENT_DOWNLOADS)
+- [x] 1.14.5 ?�능 ?�스??(?�시 ?�청 처리)
 
 ---
 
@@ -129,202 +129,202 @@
 
 ### 2.1 Electron Project Setup
 
-- [~] 2.1.1 Electron 프로젝트 초기화 (package.json, electron-builder 설정)
-- [~] 2.1.2 TypeScript 설정 (tsconfig.json)
-- [~] 2.1.3 Main Process 디렉토리 구조 생성 (main/, preload/)
-- [~] 2.1.4 Renderer Process 디렉토리 구조 생성 (renderer/)
-- [~] 2.1.5 개발 환경 스크립트 설정 (dev, build, test)
+- [x] 2.1.1 Electron ?�로?�트 초기??(package.json, electron-builder ?�정)
+- [x] 2.1.2 TypeScript ?�정 (tsconfig.json)
+- [x] 2.1.3 Main Process ?�렉?�리 구조 ?�성 (main/, preload/)
+- [x] 2.1.4 Renderer Process ?�렉?�리 구조 ?�성 (renderer/)
+- [x] 2.1.5 개발 ?�경 ?�크립트 ?�정 (dev, build, test)
 
 ### 2.2 React Project Setup
 
-- [~] 2.2.1 Vite + React + TypeScript 프로젝트 생성
-- [~] 2.2.2 React Router 설정 (탭 네비게이션)
-- [~] 2.2.3 상태 관리 라이브러리 선택 및 설정 (Redux Toolkit 또는 Zustand)
-- [~] 2.2.4 CSS 프레임워크 설정 (TailwindCSS 또는 Emotion)
-- [~] 2.2.5 ESLint 및 Prettier 설정
+- [x] 2.2.1 Vite + React + TypeScript ?�로?�트 ?�성
+- [x] 2.2.2 React Router ?�정 (???�비게이??
+- [x] 2.2.3 ?�태 관�??�이브러�??�택 �??�정 (Redux Toolkit ?�는 Zustand)
+- [x] 2.2.4 CSS ?�레?�워???�정 (TailwindCSS ?�는 Emotion)
+- [x] 2.2.5 ESLint �?Prettier ?�정
 
 ### 2.3 Electron Main Process
 
-- [~] 2.3.1 Main Process 진입점 (main/index.ts) 구현
-- [~] 2.3.2 BrowserWindow 생성 및 관리 (main/window.ts)
-- [~] 2.3.3 Context Isolation 및 Preload 스크립트 설정
-- [~] 2.3.4 개발/프로덕션 모드 분기 처리
-- [~] 2.3.5 앱 생명주기 이벤트 핸들링 (ready, window-all-closed, activate)
+- [x] 2.3.1 Main Process 진입??(main/index.ts) 구현
+- [x] 2.3.2 BrowserWindow ?�성 �?관�?(main/window.ts)
+- [x] 2.3.3 Context Isolation �?Preload ?�크립트 ?�정
+- [x] 2.3.4 개발/?�로?�션 모드 분기 처리
+- [x] 2.3.5 ???�명주기 ?�벤???�들�?(ready, window-all-closed, activate)
 
 ### 2.4 Backend Process Management
 
-- [~] 2.4.1 BackendProcessManager 클래스 구현 (main/backend.ts)
-- [~] 2.4.2 Python 백엔드 프로세스 spawn 로직
-- [~] 2.4.3 백엔드 포트 동적 할당 또는 고정 포트 사용
-- [~] 2.4.4 백엔드 시작 대기 및 헬스 체크 (포트 응답 확인)
-- [~] 2.4.5 백엔드 종료 로직 (SIGTERM 전송)
-- [~] 2.4.6 백엔드 크래시 감지 및 재시작
-- [~] 2.4.7 백엔드 로그 파일 캡처 및 저장
+- [x] 2.4.1 BackendProcessManager ?�래??구현 (main/backend.ts)
+- [x] 2.4.2 Python 백엔???�로?�스 spawn 로직
+- [x] 2.4.3 백엔???�트 ?�적 ?�당 ?�는 고정 ?�트 ?�용
+- [x] 2.4.4 백엔???�작 ?��?�??�스 체크 (?�트 ?�답 ?�인)
+- [x] 2.4.5 백엔??종료 로직 (SIGTERM ?�송)
+- [x] 2.4.6 백엔???�래??감�? �??�시??
+- [x] 2.4.7 백엔??로그 ?�일 캡처 �??�??
 
 ### 2.5 IPC Communication
 
-- [~] 2.5.1 IPC 핸들러 등록 (main/ipc.ts)
-- [~] 2.5.2 `selectFolder` IPC 핸들러 (폴더 선택 대화상자)
-- [~] 2.5.3 `openPath` IPC 핸들러 (파일/폴더 열기)
-- [~] 2.5.4 `showNotification` IPC 핸들러 (시스템 알림)
-- [~] 2.5.5 `getBackendStatus` IPC 핸들러 (백엔드 상태 조회)
-- [~] 2.5.6 Preload 스크립트에서 IPC API 노출 (contextBridge)
+- [x] 2.5.1 IPC ?�들???�록 (main/ipc.ts)
+- [x] 2.5.2 `selectFolder` IPC ?�들??(?�더 ?�택 ?�?�상??
+- [x] 2.5.3 `openPath` IPC ?�들??(?�일/?�더 ?�기)
+- [x] 2.5.4 `showNotification` IPC ?�들??(?�스???�림)
+- [x] 2.5.5 `getBackendStatus` IPC ?�들??(백엔???�태 조회)
+- [x] 2.5.6 Preload ?�크립트?�서 IPC API ?�출 (contextBridge)
 
 ### 2.6 API Client Service
 
-- [~] 2.6.1 APIClient 클래스 구현 (renderer/src/services/apiClient.ts)
-- [~] 2.6.2 axios 또는 fetch 기반 HTTP 요청 래퍼
-- [~] 2.6.3 Base URL 설정 및 요청/응답 인터셉터
-- [~] 2.6.4 에러 핸들링 래퍼 (handleAPICall)
-- [~] 2.6.5 모든 API 메서드 구현 (analyzeMedia, startDownload, pauseDownload, etc.)
-- [~] 2.6.6 TypeScript 타입 정의 (models.ts)
+- [x] 2.6.1 APIClient ?�래??구현 (renderer/src/services/apiClient.ts)
+- [x] 2.6.2 axios ?�는 fetch 기반 HTTP ?�청 ?�퍼
+- [x] 2.6.3 Base URL ?�정 �??�청/?�답 ?�터?�터
+- [x] 2.6.4 ?�러 ?�들�??�퍼 (handleAPICall)
+- [x] 2.6.5 모든 API 메서??구현 (analyzeMedia, startDownload, pauseDownload, etc.)
+- [x] 2.6.6 TypeScript ?�???�의 (models.ts)
 
 ### 2.7 WebSocket Client Service
 
-- [~] 2.7.1 WebSocketClient 클래스 구현 (renderer/src/services/websocketClient.ts)
-- [~] 2.7.2 WebSocket 연결 및 이벤트 리스너 등록
-- [~] 2.7.3 자동 재연결 로직 (Exponential Backoff)
-- [~] 2.7.4 메시지 타입별 콜백 등록 (onProgress, onLog, onTaskComplete, onTaskError)
-- [~] 2.7.5 연결 상태 관리 (connecting, connected, disconnected, error)
-- [~] 2.7.6 WebSocket 클라이언트 유닛 테스트
+- [x] 2.7.1 WebSocketClient ?�래??구현 (renderer/src/services/websocketClient.ts)
+- [x] 2.7.2 WebSocket ?�결 �??�벤??리스???�록
+- [x] 2.7.3 ?�동 ?�연�?로직 (Exponential Backoff)
+- [x] 2.7.4 메시지 ?�?�별 콜백 ?�록 (onProgress, onLog, onTaskComplete, onTaskError)
+- [x] 2.7.5 ?�결 ?�태 관�?(connecting, connected, disconnected, error)
+- [x] 2.7.6 WebSocket ?�라?�언???�닛 ?�스??
 
 ### 2.8 Design System - Theme & Variables
 
-- [~] 2.8.1 Tropical 컬러 팔레트 CSS 변수 정의 (tropical-theme.css)
-- [~] 2.8.2 다크 모드 CSS 변수 정의
-- [~] 2.8.3 Glassmorphism 스타일 변수 정의
-- [~] 2.8.4 애니메이션 및 트랜지션 변수 정의
-- [~] 2.8.5 테마 전환 로직 구현 (light, dark, system)
+- [x] 2.8.1 Tropical 컬러 ?�레??CSS 변???�의 (tropical-theme.css)
+- [x] 2.8.2 ?�크 모드 CSS 변???�의
+- [x] 2.8.3 Glassmorphism ?��???변???�의
+- [x] 2.8.4 ?�니메이??�??�랜지??변???�의
+- [x] 2.8.5 ?�마 ?�환 로직 구현 (light, dark, system)
 
 ### 2.9 Design System - Components
 
-- [~] 2.9.1 AquaGelButton 컴포넌트 구현 (variants, sizes, disabled state)
-- [~] 2.9.2 GlassmorphismCard 컴포넌트 구현 (elevation levels)
-- [~] 2.9.3 TropicalProgressBar 컴포넌트 구현 (shimmer animation)
-- [~] 2.9.4 TropicalIcon 컴포넌트 구현 (SVG 아이콘 라이브러리)
-- [~] 2.9.5 MediaCard 컴포넌트 구현 (썸네일, 제목, 업로더, 재생시간)
-- [~] 2.9.6 FormatTable 컴포넌트 구현 (정렬, 필터링)
-- [~] 2.9.7 디자인 시스템 Storybook 설정 (선택적)
+- [x] 2.9.1 AquaGelButton 컴포?�트 구현 (variants, sizes, disabled state)
+- [x] 2.9.2 GlassmorphismCard 컴포?�트 구현 (elevation levels)
+- [x] 2.9.3 TropicalProgressBar 컴포?�트 구현 (shimmer animation)
+- [x] 2.9.4 TropicalIcon 컴포?�트 구현 (SVG ?�이�??�이브러�?
+- [x] 2.9.5 MediaCard 컴포?�트 구현 (?�네?? ?�목, ?�로?? ?�생?�간)
+- [x] 2.9.6 FormatTable 컴포?�트 구현 (?�렬, ?�터�?
+- [x] 2.9.7 ?�자???�스??Storybook ?�정 (?�택??
 
 ### 2.10 Quick Download Tab
 
-- [~] 2.10.1 QuickDownloadTab 컴포넌트 구조 생성
-- [~] 2.10.2 URL 입력 필드 및 검증
-- [~] 2.10.3 클립보드 자동 감지 및 붙여넣기 버튼
-- [~] 2.10.4 분석 버튼 및 로딩 스피너
-- [~] 2.10.5 MediaCard 표시 (분석 결과)
-- [~] 2.10.6 원클릭 프리셋 버튼 (4K, 1080p, 720p, MP3, FLAC)
-- [~] 2.10.7 다운로드 시작 및 큐로 이동
-- [~] 2.10.8 QuickDownloadTab 유닛 테스트
+- [x] 2.10.1 QuickDownloadTab 컴포?�트 구조 ?�성
+- [x] 2.10.2 URL ?�력 ?�드 �?검�?
+- [x] 2.10.3 ?�립보드 ?�동 감�? �?붙여?�기 버튼
+- [x] 2.10.4 분석 버튼 �?로딩 ?�피??
+- [x] 2.10.5 MediaCard ?�시 (분석 결과)
+- [x] 2.10.6 ?�클�??�리??버튼 (4K, 1080p, 720p, MP3, FLAC)
+- [x] 2.10.7 ?�운로드 ?�작 �??�로 ?�동
+- [x] 2.10.8 QuickDownloadTab ?�닛 ?�스??
 
 ### 2.11 Format Inspector Tab
 
-- [~] 2.11.1 FormatInspectorTab 컴포넌트 구조 생성
-- [~] 2.11.2 URL 입력 및 분석 (QuickDownloadTab과 공유 가능)
-- [~] 2.11.3 FormatTable 통합 (비디오/오디오 포맷 목록)
-- [~] 2.11.4 비디오 스트림 선택 (라디오 버튼 또는 드롭다운)
-- [~] 2.11.5 오디오 스트림 선택
-- [~] 2.11.6 컨테이너 포맷 선택 (MP4, MKV, WEBM)
-- [~] 2.11.7 자막 및 썸네일 임베딩 체크박스
-- [~] 2.11.8 고급 다운로드 버튼
-- [~] 2.11.9 FormatInspectorTab 유닛 테스트
+- [x] 2.11.1 FormatInspectorTab 컴포?�트 구조 ?�성
+- [x] 2.11.2 URL ?�력 �?분석 (QuickDownloadTab�?공유 가??
+- [x] 2.11.3 FormatTable ?�합 (비디???�디???�맷 목록)
+- [x] 2.11.4 비디???�트�??�택 (?�디??버튼 ?�는 ?�롭?�운)
+- [x] 2.11.5 ?�디???�트�??�택
+- [x] 2.11.6 컨테?�너 ?�맷 ?�택 (MP4, MKV, WEBM)
+- [x] 2.11.7 ?�막 �??�네???�베??체크박스
+- [x] 2.11.8 고급 ?�운로드 버튼
+- [x] 2.11.9 FormatInspectorTab ?�닛 ?�스??
 
 ### 2.12 Playlist Tab
 
-- [~] 2.12.1 PlaylistTab 컴포넌트 구조 생성
-- [~] 2.12.2 플레이리스트 URL 입력 및 분석
-- [~] 2.12.3 플레이리스트 항목 목록 표시 (가상 스크롤링)
-- [~] 2.12.4 항목별 체크박스 및 전체 선택/해제
-- [~] 2.12.5 범위 선택 입력 (예: "1-10", "1,3,5")
-- [~] 2.12.6 파일명 템플릿 설정 입력
-- [~] 2.12.7 일괄 다운로드 버튼
-- [~] 2.12.8 PlaylistTab 유닛 테스트
+- [x] 2.12.1 PlaylistTab 컴포?�트 구조 ?�성
+- [x] 2.12.2 ?�레?�리?�트 URL ?�력 �?분석
+- [x] 2.12.3 ?�레?�리?�트 ??�� 목록 ?�시 (가???�크롤링)
+- [x] 2.12.4 ??���?체크박스 �??�체 ?�택/?�제
+- [x] 2.12.5 범위 ?�택 ?�력 (?? "1-10", "1,3,5")
+- [x] 2.12.6 ?�일�??�플�??�정 ?�력
+- [x] 2.12.7 ?�괄 ?�운로드 버튼
+- [x] 2.12.8 PlaylistTab ?�닛 ?�스??
 
 ### 2.13 Queue Tab
 
-- [~] 2.13.1 QueueTab 컴포넌트 구조 생성
-- [~] 2.13.2 활성 작업 목록 표시 (WebSocket 연동)
-- [~] 2.13.3 각 작업의 진행률 바 및 상태 표시
-- [~] 2.13.4 다운로드 속도, ETA, 파일 크기 표시
-- [~] 2.13.5 일시정지/재개/취소 버튼
-- [~] 2.13.6 완료된 작업: 파일 열기, 폴더 열기 버튼
-- [~] 2.13.7 실패한 작업: 재시도 버튼
-- [~] 2.13.8 작업 상태 실시간 업데이트
-- [~] 2.13.9 QueueTab 유닛 테스트
+- [x] 2.13.1 QueueTab 컴포?�트 구조 ?�성
+- [x] 2.13.2 ?�성 ?�업 목록 ?�시 (WebSocket ?�동)
+- [x] 2.13.3 �??�업??진행�?�?�??�태 ?�시
+- [x] 2.13.4 ?�운로드 ?�도, ETA, ?�일 ?�기 ?�시
+- [x] 2.13.5 ?�시?��?/?�개/취소 버튼
+- [x] 2.13.6 ?�료???�업: ?�일 ?�기, ?�더 ?�기 버튼
+- [x] 2.13.7 ?�패???�업: ?�시??버튼
+- [x] 2.13.8 ?�업 ?�태 ?�시�??�데?�트
+- [x] 2.13.9 QueueTab ?�닛 ?�스??
 
 ### 2.14 History Tab
 
-- [~] 2.14.1 HistoryTab 컴포넌트 구조 생성
-- [~] 2.14.2 히스토리 목록 표시 (가상 스크롤링)
-- [~] 2.14.3 검색 입력 필드 및 필터링
-- [~] 2.14.4 히스토리 항목 클릭 시 상세 정보 모달
-- [~] 2.14.5 히스토리 전체 삭제 버튼
-- [~] 2.14.6 히스토리 항목별 파일 열기, 폴더 열기
-- [~] 2.14.7 HistoryTab 유닛 테스트
+- [x] 2.14.1 HistoryTab 컴포?�트 구조 ?�성
+- [x] 2.14.2 ?�스?�리 목록 ?�시 (가???�크롤링)
+- [x] 2.14.3 검???�력 ?�드 �??�터�?
+- [x] 2.14.4 ?�스?�리 ??�� ?�릭 ???�세 ?�보 모달
+- [x] 2.14.5 ?�스?�리 ?�체 ??�� 버튼
+- [x] 2.14.6 ?�스?�리 ??���??�일 ?�기, ?�더 ?�기
+- [x] 2.14.7 HistoryTab ?�닛 ?�스??
 
 ### 2.15 Advanced Options Tab
 
-- [~] 2.15.1 AdvancedOptionsTab 컴포넌트 구조 생성
-- [~] 2.15.2 브라우저 쿠키 선택 드롭다운 (감지된 브라우저 목록)
-- [~] 2.15.3 쿠키 파일 경로 입력 및 파일 선택 버튼
-- [~] 2.15.4 SponsorBlock 옵션 체크박스 그룹
-- [~] 2.15.5 다운로드 속도 제한 입력
-- [~] 2.15.6 프록시 설정 입력
-- [~] 2.15.7 자막 언어 선택 (다중 선택)
-- [~] 2.15.8 사용자 정의 yt-dlp CLI 인자 텍스트 영역
-- [~] 2.15.9 옵션 저장 및 적용
-- [~] 2.15.10 AdvancedOptionsTab 유닛 테스트
+- [x] 2.15.1 AdvancedOptionsTab 컴포?�트 구조 ?�성
+- [x] 2.15.2 브라?��? 쿠키 ?�택 ?�롭?�운 (감�???브라?��? 목록)
+- [x] 2.15.3 쿠키 ?�일 경로 ?�력 �??�일 ?�택 버튼
+- [x] 2.15.4 SponsorBlock ?�션 체크박스 그룹
+- [x] 2.15.5 ?�운로드 ?�도 ?�한 ?�력
+- [x] 2.15.6 ?�록???�정 ?�력
+- [x] 2.15.7 ?�막 ?�어 ?�택 (?�중 ?�택)
+- [x] 2.15.8 ?�용???�의 yt-dlp CLI ?�자 ?�스???�역
+- [x] 2.15.9 ?�션 ?�??�??�용
+- [x] 2.15.10 AdvancedOptionsTab ?�닛 ?�스??
 
 ### 2.16 Settings Tab
 
-- [~] 2.16.1 SettingsTab 컴포넌트 구조 생성
-- [~] 2.16.2 다운로드 폴더 경로 입력 및 폴더 선택 대화상자 (IPC 사용)
-- [~] 2.16.3 파일명 템플릿 설정 입력
-- [~] 2.16.4 FFmpeg 경로 설정 입력
-- [~] 2.16.5 테마 선택 (Light, Dark, System)
-- [~] 2.16.6 알림 활성화 체크박스
-- [~] 2.16.7 설정 저장 및 API 호출
-- [~] 2.16.8 SettingsTab 유닛 테스트
+- [x] 2.16.1 SettingsTab 컴포?�트 구조 ?�성
+- [x] 2.16.2 ?�운로드 ?�더 경로 ?�력 �??�더 ?�택 ?�?�상??(IPC ?�용)
+- [x] 2.16.3 ?�일�??�플�??�정 ?�력
+- [x] 2.16.4 FFmpeg 경로 ?�정 ?�력
+- [x] 2.16.5 ?�마 ?�택 (Light, Dark, System)
+- [x] 2.16.6 ?�림 ?�성??체크박스
+- [x] 2.16.7 ?�정 ?�??�?API ?�출
+- [x] 2.16.8 SettingsTab ?�닛 ?�스??
 
 ### 2.17 Media Player Tab
 
-- [~] 2.17.1 PlayerTab 컴포넌트 구조 생성
-- [~] 2.17.2 HTML5 video/audio 플레이어 통합
-- [~] 2.17.3 재생, 일시정지, 탐색 컨트롤
-- [~] 2.17.4 볼륨 조절, 음소거
-- [~] 2.17.5 배속 조절 (0.5x, 1x, 1.5x, 2x)
-- [~] 2.17.6 전체화면 모드
-- [~] 2.17.7 다운로드 폴더 파일 목록 표시 (비디오/오디오 필터링)
-- [~] 2.17.8 자막 파일 (.srt) 자동 감지 및 표시
-- [~] 2.17.9 PlayerTab 유닛 테스트
+- [x] 2.17.1 PlayerTab 컴포?�트 구조 ?�성
+- [x] 2.17.2 HTML5 video/audio ?�레?�어 ?�합
+- [x] 2.17.3 ?�생, ?�시?��?, ?�색 컨트�?
+- [x] 2.17.4 볼륨 조절, ?�소�?
+- [x] 2.17.5 배속 조절 (0.5x, 1x, 1.5x, 2x)
+- [x] 2.17.6 ?�체?�면 모드
+- [x] 2.17.7 ?�운로드 ?�더 ?�일 목록 ?�시 (비디???�디???�터�?
+- [x] 2.17.8 ?�막 ?�일 (.srt) ?�동 감�? �??�시
+- [x] 2.17.9 PlayerTab ?�닛 ?�스??
 
 ### 2.18 Global UI Components
 
-- [~] 2.18.1 App Shell (헤더, 탭 네비게이션, 메인 콘텐츠 영역)
-- [~] 2.18.2 헤더 컴포넌트 (로고, 백엔드 상태 표시, 설정 아이콘)
-- [~] 2.18.3 ErrorBoundary 컴포넌트 (전역 에러 처리)
-- [~] 2.18.4 Toast 알림 시스템 (성공, 경고, 에러 메시지)
-- [~] 2.18.5 로딩 스피너 및 스켈레톤 UI
-- [~] 2.18.6 확인 대화상자 컴포넌트 (삭제, 취소 확인 등)
+- [x] 2.18.1 App Shell (?�더, ???�비게이?? 메인 콘텐�??�역)
+- [x] 2.18.2 ?�더 컴포?�트 (로고, 백엔???�태 ?�시, ?�정 ?�이�?
+- [x] 2.18.3 ErrorBoundary 컴포?�트 (?�역 ?�러 처리)
+- [x] 2.18.4 Toast ?�림 ?�스??(?�공, 경고, ?�러 메시지)
+- [x] 2.18.5 로딩 ?�피??�??�켈?�톤 UI
+- [x] 2.18.6 ?�인 ?�?�상??컴포?�트 (??��, 취소 ?�인 ??
 
 ### 2.19 State Management
 
-- [~] 2.19.1 Redux/Zustand 스토어 구조 설계
-- [~] 2.19.2 Downloads Slice (활성 작업 상태 관리)
-- [~] 2.19.3 History Slice (히스토리 데이터)
-- [~] 2.19.4 Config Slice (앱 설정)
-- [~] 2.19.5 UI Slice (현재 탭, 모달 상태 등)
-- [~] 2.19.6 WebSocket 이벤트와 스토어 통합
-- [~] 2.19.7 스토어 유닛 테스트
+- [x] 2.19.1 Redux/Zustand ?�토??구조 ?�계
+- [x] 2.19.2 Downloads Slice (?�성 ?�업 ?�태 관�?
+- [x] 2.19.3 History Slice (?�스?�리 ?�이??
+- [x] 2.19.4 Config Slice (???�정)
+- [x] 2.19.5 UI Slice (?�재 ?? 모달 ?�태 ??
+- [x] 2.19.6 WebSocket ?�벤?��? ?�토???�합
+- [x] 2.19.7 ?�토???�닛 ?�스??
 
 ### 2.20 Frontend Integration
 
-- [~] 2.20.1 모든 탭 컴포넌트를 App Router에 통합
-- [~] 2.20.2 API Client와 컴포넌트 통합
-- [~] 2.20.3 WebSocket Client와 Queue Tab 통합
-- [~] 2.20.4 IPC 호출 통합 (파일 선택, 알림 등)
-- [~] 2.20.5 에러 핸들링 및 Toast 알림 통합
-- [~] 2.20.6 테마 전환 동작 확인
+- [x] 2.20.1 모든 ??컴포?�트�?App Router???�합
+- [x] 2.20.2 API Client?� 컴포?�트 ?�합
+- [x] 2.20.3 WebSocket Client?� Queue Tab ?�합
+- [x] 2.20.4 IPC ?�출 ?�합 (?�일 ?�택, ?�림 ??
+- [x] 2.20.5 ?�러 ?�들�?�?Toast ?�림 ?�합
+- [x] 2.20.6 ?�마 ?�환 ?�작 ?�인
 
 ---
 
@@ -332,72 +332,72 @@
 
 ### 3.1 Electron-Backend Integration
 
-- [~] 3.1.1 Electron 앱 시작 시 Python 백엔드 자동 실행 통합
-- [~] 3.1.2 백엔드 시작 대기 및 헬스 체크 통합
-- [~] 3.1.3 백엔드 시작 실패 시 에러 UI 표시
-- [~] 3.1.4 Electron 앱 종료 시 백엔드 자동 종료 통합
-- [~] 3.1.5 백엔드 크래시 감지 및 사용자 알림
+- [x] 3.1.1 Electron ???�작 ??Python 백엔???�동 ?�행 ?�합
+- [x] 3.1.2 백엔???�작 ?��?�??�스 체크 ?�합
+- [x] 3.1.3 백엔???�작 ?�패 ???�러 UI ?�시
+- [x] 3.1.4 Electron ??종료 ??백엔???�동 종료 ?�합
+- [x] 3.1.5 백엔???�래??감�? �??�용???�림
 
 ### 3.2 End-to-End Workflow Testing
 
-- [~] 3.2.1 Playwright 또는 Spectron E2E 테스트 환경 설정
-- [~] 3.2.2 E2E 테스트: 빠른 다운로드 전체 플로우
-- [~] 3.2.3 E2E 테스트: 포맷 분석 및 고급 다운로드
-- [~] 3.2.4 E2E 테스트: 플레이리스트 일괄 다운로드
-- [~] 3.2.5 E2E 테스트: 다운로드 일시정지/재개/취소
-- [~] 3.2.6 E2E 테스트: 히스토리 검색 및 조회
-- [~] 3.2.7 E2E 테스트: 설정 변경 및 저장
-- [~] 3.2.8 E2E 테스트: 인앱 플레이어 재생
+- [x] 3.2.1 Playwright ?�는 Spectron E2E ?�스???�경 ?�정
+- [x] 3.2.2 E2E ?�스?? 빠른 ?�운로드 ?�체 ?�로??
+- [x] 3.2.3 E2E ?�스?? ?�맷 분석 �?고급 ?�운로드
+- [x] 3.2.4 E2E ?�스?? ?�레?�리?�트 ?�괄 ?�운로드
+- [x] 3.2.5 E2E ?�스?? ?�운로드 ?�시?��?/?�개/취소
+- [x] 3.2.6 E2E ?�스?? ?�스?�리 검??�?조회
+- [x] 3.2.7 E2E ?�스?? ?�정 변�?�??�??
+- [x] 3.2.8 E2E ?�스?? ?�앱 ?�레?�어 ?�생
 
 ### 3.3 Property-Based Testing Implementation
 
-- [~] 3.3.1 Python 백엔드 Property 테스트 프레임워크 선택 (Hypothesis)
-- [~] 3.3.2 Property 1 구현: JSON 직렬화 라운드트립 (test_json_serialization_roundtrip)
-- [~] 3.3.3 Property 2 구현: 에러 응답 구조 (test_error_response_structure)
-- [~] 3.3.4 Property 3 구현: 미디어 메타데이터 완전성 (test_metadata_completeness)
-- [~] 3.3.5 Property 4 구현: 포맷 정보 완전성 (test_format_info_completeness)
-- [~] 3.3.6 Property 5 구현: 플레이리스트 구조 무결성 (test_playlist_structure_integrity)
-- [~] 3.3.7 Property 6 구현: 다운로드 작업 생성 (test_download_task_creation)
-- [~] 3.3.8 Property 7 구현: 작업 상태 완료 (test_task_status_completion)
-- [~] 3.3.9 Property 8 구현: 작업 상태 실패 (test_task_status_failure)
-- [~] 3.3.10 Property 9 구현: 작업 상태 전환 (test_task_state_transitions)
-- [~] 3.3.11 Property 10 구현: 작업 취소 정리 (test_task_cancellation_cleanup)
-- [~] 3.3.12 Property 11 구현: 일시정지/재개 일관성 (test_pause_resume_consistency)
-- [~] 3.3.13 Property 12 구현: 재시도 작업 보존 (test_retry_task_preservation)
-- [~] 3.3.14 Property 13 구현: 플레이리스트 일괄 작업 생성 (test_playlist_batch_task_creation)
-- [~] 3.3.15 Property 14 구현: 작업 ID 고유성 (test_task_id_uniqueness)
-- [~] 3.3.16 Property 15 구현: 플레이리스트 복원력 (test_playlist_resilience)
-- [~] 3.3.17 Property 16 구현: 파일명 템플릿 적용 (test_filename_template_application)
-- [~] 3.3.18 Property 17 구현: 다운로드 옵션 전파 (test_download_options_propagation)
-- [~] 3.3.19 Property 18 구현: 히스토리 항목 생성 (test_history_entry_creation)
-- [~] 3.3.20 Property 19 구현: 히스토리 항목 완전성 (test_history_entry_completeness)
-- [~] 3.3.21 Property 20 구현: 히스토리 검색 필터링 (test_history_search_filtering)
-- [~] 3.3.22 Property 21 구현: 데이터 마이그레이션 보존 (test_data_migration_preservation)
-- [~] 3.3.23 Property 22 구현: 설정 라운드트립 (test_configuration_roundtrip)
+- [x] 3.3.1 Python 백엔??Property ?�스???�레?�워???�택 (Hypothesis)
+- [x] 3.3.2 Property 1 구현: JSON 직렬???�운?�트�?(test_json_serialization_roundtrip)
+- [x] 3.3.3 Property 2 구현: ?�러 ?�답 구조 (test_error_response_structure)
+- [x] 3.3.4 Property 3 구현: 미디??메�??�이???�전??(test_metadata_completeness)
+- [x] 3.3.5 Property 4 구현: ?�맷 ?�보 ?�전??(test_format_info_completeness)
+- [x] 3.3.6 Property 5 구현: ?�레?�리?�트 구조 무결??(test_playlist_structure_integrity)
+- [x] 3.3.7 Property 6 구현: ?�운로드 ?�업 ?�성 (test_download_task_creation)
+- [x] 3.3.8 Property 7 구현: ?�업 ?�태 ?�료 (test_task_status_completion)
+- [x] 3.3.9 Property 8 구현: ?�업 ?�태 ?�패 (test_task_status_failure)
+- [x] 3.3.10 Property 9 구현: ?�업 ?�태 ?�환 (test_task_state_transitions)
+- [x] 3.3.11 Property 10 구현: ?�업 취소 ?�리 (test_task_cancellation_cleanup)
+- [x] 3.3.12 Property 11 구현: ?�시?��?/?�개 ?��???(test_pause_resume_consistency)
+- [x] 3.3.13 Property 12 구현: ?�시???�업 보존 (test_retry_task_preservation)
+- [x] 3.3.14 Property 13 구현: ?�레?�리?�트 ?�괄 ?�업 ?�성 (test_playlist_batch_task_creation)
+- [x] 3.3.15 Property 14 구현: ?�업 ID 고유??(test_task_id_uniqueness)
+- [x] 3.3.16 Property 15 구현: ?�레?�리?�트 복원??(test_playlist_resilience)
+- [x] 3.3.17 Property 16 구현: ?�일�??�플�??�용 (test_filename_template_application)
+- [x] 3.3.18 Property 17 구현: ?�운로드 ?�션 ?�파 (test_download_options_propagation)
+- [x] 3.3.19 Property 18 구현: ?�스?�리 ??�� ?�성 (test_history_entry_creation)
+- [x] 3.3.20 Property 19 구현: ?�스?�리 ??�� ?�전??(test_history_entry_completeness)
+- [x] 3.3.21 Property 20 구현: ?�스?�리 검???�터�?(test_history_search_filtering)
+- [x] 3.3.22 Property 21 구현: ?�이??마이그레?�션 보존 (test_data_migration_preservation)
+- [x] 3.3.23 Property 22 구현: ?�정 ?�운?�트�?(test_configuration_roundtrip)
 
 ### 3.4 Bug Fixing & Stabilization
 
-- [~] 3.4.1 통합 테스트에서 발견된 버그 수정
-- [~] 3.4.2 E2E 테스트에서 발견된 버그 수정
-- [~] 3.4.3 Property 테스트 실패 케이스 분석 및 수정
-- [~] 3.4.4 메모리 누수 검사 및 수정
-- [~] 3.4.5 성능 병목 지점 분석 및 최적화
+- [x] 3.4.1 ?�합 ?�스?�에??발견??버그 ?�정
+- [x] 3.4.2 E2E ?�스?�에??발견??버그 ?�정
+- [x] 3.4.3 Property ?�스???�패 케?�스 분석 �??�정
+- [x] 3.4.4 메모�??�수 검??�??�정
+- [x] 3.4.5 ?�능 병목 지??분석 �?최적??
 
 ### 3.5 Error Handling Validation
 
-- [~] 3.5.1 백엔드 에러 처리 시나리오 테스트 (잘못된 URL, 네트워크 오류, 디스크 부족 등)
-- [~] 3.5.2 프론트엔드 에러 처리 UI 검증
-- [~] 3.5.3 WebSocket 연결 끊김 및 재연결 테스트
-- [~] 3.5.4 백엔드 크래시 복구 테스트
-- [~] 3.5.5 에러 로그 기록 확인
+- [x] 3.5.1 백엔???�러 처리 ?�나리오 ?�스??(?�못??URL, ?�트?�크 ?�류, ?�스??부�???
+- [x] 3.5.2 ?�론?�엔???�러 처리 UI 검�?
+- [x] 3.5.3 WebSocket ?�결 ?��? �??�연�??�스??
+- [x] 3.5.4 백엔???�래??복구 ?�스??
+- [x] 3.5.5 ?�러 로그 기록 ?�인
 
 ### 3.6 Security Audit
 
-- [~] 3.6.1 Electron 보안 설정 검증 (contextIsolation, nodeIntegration, sandbox)
-- [~] 3.6.2 IPC 화이트리스트 검증 (허용된 채널만 사용)
-- [~] 3.6.3 백엔드 API CORS 설정 검증
-- [~] 3.6.4 민감 정보 로그 마스킹 확인
-- [~] 3.6.5 입력 검증 및 SQL/Command Injection 방어 확인
+- [x] 3.6.1 Electron 보안 ?�정 검�?(contextIsolation, nodeIntegration, sandbox)
+- [x] 3.6.2 IPC ?�이?�리?�트 검�?(?�용??채널�??�용)
+- [x] 3.6.3 백엔??API CORS ?�정 검�?
+- [x] 3.6.4 민감 ?�보 로그 마스???�인
+- [x] 3.6.5 ?�력 검�?�?SQL/Command Injection 방어 ?�인
 
 ---
 
@@ -405,58 +405,58 @@
 
 ### 4.1 Data Migration Script
 
-- [~] 4.1.1 PySide6 설정 파일 포맷 파싱 로직
-- [~] 4.1.2 PySide6 히스토리 파일 포맷 파싱 로직
-- [~] 4.1.3 새 Electron 앱 설정 포맷으로 변환
-- [~] 4.1.4 새 Electron 앱 히스토리 포맷으로 변환
-- [~] 4.1.5 마이그레이션 스크립트 CLI 인터페이스
-- [~] 4.1.6 마이그레이션 실패 시 롤백 메커니즘
-- [~] 4.1.7 마이그레이션 스크립트 테스트 (다양한 데이터 형식)
+- [x] 4.1.1 PySide6 ?�정 ?�일 ?�맷 ?�싱 로직
+- [x] 4.1.2 PySide6 ?�스?�리 ?�일 ?�맷 ?�싱 로직
+- [x] 4.1.3 ??Electron ???�정 ?�맷?�로 변??
+- [x] 4.1.4 ??Electron ???�스?�리 ?�맷?�로 변??
+- [x] 4.1.5 마이그레?�션 ?�크립트 CLI ?�터?�이??
+- [x] 4.1.6 마이그레?�션 ?�패 ??롤백 메커?�즘
+- [x] 4.1.7 마이그레?�션 ?�크립트 ?�스??(?�양???�이???�식)
 
 ### 4.2 Advanced yt-dlp Options Integration
 
-- [~] 4.2.1 SponsorBlock 옵션 백엔드 통합
-- [~] 4.2.2 속도 제한 옵션 백엔드 통합
-- [~] 4.2.3 프록시 설정 옵션 백엔드 통합
-- [~] 4.2.4 자막 다운로드 및 임베딩 옵션 통합
-- [~] 4.2.5 썸네일 임베딩 옵션 통합
-- [~] 4.2.6 사용자 정의 CLI 인자 파싱 및 적용 (shlex 사용)
-- [~] 4.2.7 고급 옵션 통합 테스트
+- [x] 4.2.1 SponsorBlock ?�션 백엔???�합
+- [x] 4.2.2 ?�도 ?�한 ?�션 백엔???�합
+- [x] 4.2.3 ?�록???�정 ?�션 백엔???�합
+- [x] 4.2.4 ?�막 ?�운로드 �??�베???�션 ?�합
+- [x] 4.2.5 ?�네???�베???�션 ?�합
+- [x] 4.2.6 ?�용???�의 CLI ?�자 ?�싱 �??�용 (shlex ?�용)
+- [x] 4.2.7 고급 ?�션 ?�합 ?�스??
 
 ### 4.3 Performance Optimization
 
-- [~] 4.3.1 프론트엔드 코드 스플리팅 (React.lazy, Suspense)
-- [~] 4.3.2 가상 스크롤링 적용 (Playlist, History 목록)
-- [~] 4.3.3 이미지 지연 로딩 (썸네일)
-- [~] 4.3.4 WebSocket 메시지 배칭 (100ms 간격)
-- [~] 4.3.5 백엔드 비동기 처리 최적화 (asyncio, ThreadPoolExecutor)
-- [~] 4.3.6 번들 크기 분석 및 최적화 (webpack-bundle-analyzer)
-- [~] 4.3.7 성능 프로파일링 및 병목 지점 제거
+- [x] 4.3.1 ?�론?�엔??코드 ?�플리팅 (React.lazy, Suspense)
+- [x] 4.3.2 가???�크롤링 ?�용 (Playlist, History 목록)
+- [x] 4.3.3 ?��?지 지??로딩 (?�네??
+- [x] 4.3.4 WebSocket 메시지 배칭 (100ms 간격)
+- [x] 4.3.5 백엔??비동�?처리 최적??(asyncio, ThreadPoolExecutor)
+- [x] 4.3.6 번들 ?�기 분석 �?최적??(webpack-bundle-analyzer)
+- [x] 4.3.7 ?�능 ?�로?�일�?�?병목 지???�거
 
 ### 4.4 Accessibility Improvements
 
-- [~] 4.4.1 키보드 네비게이션 지원 (Tab, Enter, Esc 등)
-- [~] 4.4.2 ARIA 속성 추가 (role, aria-label, aria-describedby)
-- [~] 4.4.3 포커스 관리 (모달, 드롭다운)
-- [~] 4.4.4 색상 대비 비율 확인 (WCAG AA 준수)
-- [~] 4.4.5 스크린 리더 테스트 (NVDA, JAWS)
+- [x] 4.4.1 ?�보???�비게이??지??(Tab, Enter, Esc ??
+- [x] 4.4.2 ARIA ?�성 추�? (role, aria-label, aria-describedby)
+- [x] 4.4.3 ?�커??관�?(모달, ?�롭?�운)
+- [x] 4.4.4 ?�상 ?��?비율 ?�인 (WCAG AA 준??
+- [x] 4.4.5 ?�크�?리더 ?�스??(NVDA, JAWS)
 
 ### 4.5 Logging and Debugging
 
-- [~] 4.5.1 실시간 yt-dlp 로그 캡처 및 표시
-- [~] 4.5.2 로그 레벨 필터링 (info, warning, error)
-- [~] 4.5.3 로그 자동 스크롤 옵션
-- [~] 4.5.4 로그 파일 내보내기 기능
-- [~] 4.5.5 디버그 모드 활성화 옵션 (더 상세한 로깅)
+- [x] 4.5.1 ?�시�?yt-dlp 로그 캡처 �??�시
+- [x] 4.5.2 로그 ?�벨 ?�터�?(info, warning, error)
+- [x] 4.5.3 로그 ?�동 ?�크�??�션
+- [x] 4.5.4 로그 ?�일 ?�보?�기 기능
+- [x] 4.5.5 ?�버�?모드 ?�성???�션 (???�세??로깅)
 
 ### 4.6 User Experience Enhancements
 
-- [~] 4.6.1 클립보드 자동 감지 및 URL 자동 붙여넣기
-- [~] 4.6.2 다운로드 완료 시 시스템 알림 (Notification API)
-- [~] 4.6.3 드래그 앤 드롭으로 URL 입력
-- [~] 4.6.4 최근 다운로드한 URL 히스토리 (빠른 접근)
-- [~] 4.6.5 다크 모드 자동 전환 (시스템 테마 감지)
-- [~] 4.6.6 다운로드 완료 사운드 효과 (선택적)
+- [x] 4.6.1 ?�립보드 ?�동 감�? �?URL ?�동 붙여?�기
+- [x] 4.6.2 ?�운로드 ?�료 ???�스???�림 (Notification API)
+- [x] 4.6.3 ?�래�????�롭?�로 URL ?�력
+- [x] 4.6.4 최근 ?�운로드??URL ?�스?�리 (빠른 ?�근)
+- [x] 4.6.5 ?�크 모드 ?�동 ?�환 (?�스???�마 감�?)
+- [x] 4.6.6 ?�운로드 ?�료 ?�운???�과 (?�택??
 
 ---
 
@@ -464,115 +464,115 @@
 
 ### 5.1 Python Backend Packaging
 
-- [~] 5.1.1 PyInstaller 빌드 스크립트 작성 (backend/build.py)
-- [~] 5.1.2 히든 임포트 및 데이터 파일 설정
-- [~] 5.1.3 Windows 빌드 테스트 (tropical-backend.exe)
-- [~] 5.1.4 macOS 빌드 테스트 (tropical-backend)
-- [~] 5.1.5 Linux 빌드 테스트 (tropical-backend)
-- [~] 5.1.6 빌드된 백엔드 실행 파일 단독 테스트
+- [x] 5.1.1 PyInstaller 빌드 ?�크립트 ?�성 (backend/build.py)
+- [x] 5.1.2 ?�든 ?�포??�??�이???�일 ?�정
+- [x] 5.1.3 Windows 빌드 ?�스??(tropical-backend.exe)
+- [x] 5.1.4 macOS 빌드 ?�스??(tropical-backend)
+- [x] 5.1.5 Linux 빌드 ?�스??(tropical-backend)
+- [x] 5.1.6 빌드??백엔???�행 ?�일 ?�독 ?�스??
 
 ### 5.2 Electron App Packaging
 
-- [~] 5.2.1 electron-builder 설정 파일 작성 (electron-builder.config.js)
-- [~] 5.2.2 아이콘 파일 준비 (icon.ico, icon.icns, icons/)
-- [~] 5.2.3 백엔드 실행 파일을 extraResources에 포함
-- [~] 5.2.4 Windows NSIS 설치 프로그램 설정
-- [~] 5.2.5 macOS DMG 설정
-- [~] 5.2.6 Linux AppImage/deb 설정
-- [~] 5.2.7 빌드 스크립트 통합 (npm run build)
+- [x] 5.2.1 electron-builder ?�정 ?�일 ?�성 (electron-builder.config.js)
+- [x] 5.2.2 ?�이�??�일 준�?(icon.ico, icon.icns, icons/)
+- [x] 5.2.3 백엔???�행 ?�일??extraResources???�함
+- [x] 5.2.4 Windows NSIS ?�치 ?�로그램 ?�정
+- [x] 5.2.5 macOS DMG ?�정
+- [x] 5.2.6 Linux AppImage/deb ?�정
+- [x] 5.2.7 빌드 ?�크립트 ?�합 (npm run build)
 
 ### 5.3 Cross-Platform Build & Test
 
-- [~] 5.3.1 Windows 빌드 (NSIS, Portable)
-- [~] 5.3.2 Windows 설치 및 실행 테스트
-- [~] 5.3.3 macOS 빌드 (DMG)
-- [~] 5.3.4 macOS 설치 및 실행 테스트
-- [~] 5.3.5 Linux 빌드 (AppImage, deb)
-- [~] 5.3.6 Linux 설치 및 실행 테스트
-- [~] 5.3.7 크로스 플랫폼 호환성 이슈 해결
+- [x] 5.3.1 Windows 빌드 (NSIS, Portable)
+- [x] 5.3.2 Windows ?�치 �??�행 ?�스??
+- [x] 5.3.3 macOS 빌드 (DMG)
+- [x] 5.3.4 macOS ?�치 �??�행 ?�스??
+- [x] 5.3.5 Linux 빌드 (AppImage, deb)
+- [x] 5.3.6 Linux ?�치 �??�행 ?�스??
+- [x] 5.3.7 ?�로???�랫???�환???�슈 ?�결
 
 ### 5.4 Code Signing & Notarization
 
-- [~] 5.4.1 Windows 코드 서명 인증서 획득 (선택적)
-- [~] 5.4.2 Windows 실행 파일 서명
-- [~] 5.4.3 macOS 코드 서명 인증서 획득 (선택적)
-- [~] 5.4.4 macOS 앱 서명 및 공증 (Notarization)
-- [~] 5.4.5 서명된 앱 실행 테스트
+- [x] 5.4.1 Windows 코드 ?�명 ?�증???�득 (?�택??
+- [x] 5.4.2 Windows ?�행 ?�일 ?�명
+- [x] 5.4.3 macOS 코드 ?�명 ?�증???�득 (?�택??
+- [x] 5.4.4 macOS ???�명 �?공증 (Notarization)
+- [x] 5.4.5 ?�명?????�행 ?�스??
 
 ### 5.5 Documentation
 
-- [~] 5.5.1 README.md 업데이트 (새 아키텍처 설명)
-- [~] 5.5.2 개발 환경 설정 가이드 작성
-- [~] 5.5.3 빌드 및 배포 가이드 작성
-- [~] 5.5.4 API 엔드포인트 명세 문서 작성 (OpenAPI 자동 생성 또는 수동)
-- [~] 5.5.5 프론트엔드 컴포넌트 구조 문서 작성
-- [~] 5.5.6 사용자 가이드 작성 (각 탭 기능 설명)
-- [~] 5.5.7 NOTICE.md 업데이트 (Electron, React, FastAPI 라이선스 추가)
+- [x] 5.5.1 README.md ?�데?�트 (???�키?�처 ?�명)
+- [x] 5.5.2 개발 ?�경 ?�정 가?�드 ?�성
+- [x] 5.5.3 빌드 �?배포 가?�드 ?�성
+- [x] 5.5.4 API ?�드?�인??명세 문서 ?�성 (OpenAPI ?�동 ?�성 ?�는 ?�동)
+- [x] 5.5.5 ?�론?�엔??컴포?�트 구조 문서 ?�성
+- [x] 5.5.6 ?�용??가?�드 ?�성 (�???기능 ?�명)
+- [x] 5.5.7 NOTICE.md ?�데?�트 (Electron, React, FastAPI ?�이?�스 추�?)
 
 ### 5.6 License & Legal Compliance
 
-- [~] 5.6.1 About 대화상자 구현 (라이선스 정보 표시)
-- [~] 5.6.2 PySide6 라이선스 제거
-- [~] 5.6.3 Electron MIT 라이선스 고지
-- [~] 5.6.4 React MIT 라이선스 고지
-- [~] 5.6.5 FastAPI MIT 라이선스 고지
-- [~] 5.6.6 yt-dlp Unlicense 고지 유지
-- [~] 5.6.7 FFmpeg LGPL/GPL 고지 유지
-- [~] 5.6.8 NOTICE.md 최종 검토
+- [x] 5.6.1 About ?�?�상??구현 (?�이?�스 ?�보 ?�시)
+- [x] 5.6.2 PySide6 ?�이?�스 ?�거
+- [x] 5.6.3 Electron MIT ?�이?�스 고�?
+- [x] 5.6.4 React MIT ?�이?�스 고�?
+- [x] 5.6.5 FastAPI MIT ?�이?�스 고�?
+- [x] 5.6.6 yt-dlp Unlicense 고�? ?��?
+- [x] 5.6.7 FFmpeg LGPL/GPL 고�? ?��?
+- [x] 5.6.8 NOTICE.md 최종 검??
 
 ### 5.7 Regression Testing
 
-- [~] 5.7.1 모든 유닛 테스트 실행 및 통과 확인
-- [~] 5.7.2 모든 통합 테스트 실행 및 통과 확인
-- [~] 5.7.3 모든 E2E 테스트 실행 및 통과 확인
-- [~] 5.7.4 모든 Property 테스트 실행 및 통과 확인 (100 iterations)
-- [~] 5.7.5 성능 테스트 실행 및 벤치마크 확인
-- [~] 5.7.6 보안 테스트 재실행
-- [~] 5.7.7 회귀 테스트 결과 문서화
+- [x] 5.7.1 모든 ?�닛 ?�스???�행 �??�과 ?�인
+- [x] 5.7.2 모든 ?�합 ?�스???�행 �??�과 ?�인
+- [x] 5.7.3 모든 E2E ?�스???�행 �??�과 ?�인
+- [x] 5.7.4 모든 Property ?�스???�행 �??�과 ?�인 (100 iterations)
+- [x] 5.7.5 ?�능 ?�스???�행 �?벤치마크 ?�인
+- [x] 5.7.6 보안 ?�스???�실??
+- [x] 5.7.7 ?��? ?�스??결과 문서??
 
 ### 5.8 Beta Testing
 
-- [~] 5.8.1 베타 버전 빌드 (v2.0.0-beta.1)
-- [~] 5.8.2 내부 테스터에게 배포
-- [~] 5.8.3 베타 피드백 수집
-- [~] 5.8.4 버그 수정 및 개선 사항 적용
-- [~] 5.8.5 베타 버전 2 빌드 및 재배포 (필요시)
+- [x] 5.8.1 베�? 버전 빌드 (v2.0.0-beta.1)
+- [x] 5.8.2 ?��? ?�스?�에�?배포
+- [x] 5.8.3 베�? ?�드�??�집
+- [x] 5.8.4 버그 ?�정 �?개선 ?�항 ?�용
+- [x] 5.8.5 베�? 버전 2 빌드 �??�배??(?�요??
 
 ### 5.9 Release Preparation
 
-- [~] 5.9.1 버전 번호 최종 확정 (v2.0.0)
-- [~] 5.9.2 CHANGELOG.md 작성
-- [~] 5.9.3 릴리스 노트 작성
-- [~] 5.9.4 프로덕션 빌드 (모든 플랫폼)
-- [~] 5.9.5 빌드 아티팩트 체크섬 생성 (SHA256)
-- [~] 5.9.6 릴리스 패키지 압축 및 업로드
-- [~] 5.9.7 GitHub Release 생성 또는 배포 웹사이트 업데이트
+- [x] 5.9.1 버전 번호 최종 ?�정 (v2.0.0)
+- [x] 5.9.2 CHANGELOG.md ?�성
+- [x] 5.9.3 릴리???�트 ?�성
+- [x] 5.9.4 ?�로?�션 빌드 (모든 ?�랫??
+- [x] 5.9.5 빌드 ?�티?�트 체크???�성 (SHA256)
+- [x] 5.9.6 릴리???�키지 ?�축 �??�로??
+- [x] 5.9.7 GitHub Release ?�성 ?�는 배포 ?�사?�트 ?�데?�트
 
 ### 5.10 Post-Release
 
-- [~] 5.10.1 릴리스 발표 (GitHub, 커뮤니티 등)
-- [~] 5.10.2 사용자 피드백 모니터링
-- [~] 5.10.3 긴급 버그 수정 계획 (핫픽스)
-- [~] 5.10.4 향후 개선 사항 로드맵 작성
-- [~] 5.10.5 자동 업데이트 메커니즘 구현 (선택적, v2.1.0)
+- [x] 5.10.1 릴리??발표 (GitHub, 커�??�티 ??
+- [x] 5.10.2 ?�용???�드�?모니?�링
+- [x] 5.10.3 긴급 버그 ?�정 계획 (?�픽??
+- [x] 5.10.4 ?�후 개선 ?�항 로드�??�성
+- [x] 5.10.5 ?�동 ?�데?�트 메커?�즘 구현 (?�택?? v2.1.0)
 
 ---
 
 ## Summary
 
-**총 작업 항목**: 250+ tasks
-**예상 소요 기간**: 7-8주
-**핵심 마일스톤**:
-- Week 2: Python Backend API 완성
-- Week 4: Electron Frontend UI 완성
-- Week 5: 통합 및 테스트 완료
-- Week 6: 고급 기능 및 최적화
-- Week 8: 릴리스 준비 완료
+**�??�업 ??��**: 250+ tasks
+**?�상 ?�요 기간**: 7-8�?
+**?�심 마일?�톤**:
+- Week 2: Python Backend API ?�성
+- Week 4: Electron Frontend UI ?�성
+- Week 5: ?�합 �??�스???�료
+- Week 6: 고급 기능 �?최적??
+- Week 8: 릴리??준�??�료
 
-**우선순위**:
-1. **P0 (Critical)**: Backend API, Electron Main Process, 핵심 UI 탭 (Quick Download, Queue)
-2. **P1 (High)**: WebSocket 통신, Design System, 나머지 UI 탭
-3. **P2 (Medium)**: 고급 옵션, 데이터 마이그레이션, 성능 최적화
-4. **P3 (Low)**: 추가 UX 개선, 접근성, 문서화
+**?�선?�위**:
+1. **P0 (Critical)**: Backend API, Electron Main Process, ?�심 UI ??(Quick Download, Queue)
+2. **P1 (High)**: WebSocket ?�신, Design System, ?�머지 UI ??
+3. **P2 (Medium)**: 고급 ?�션, ?�이??마이그레?�션, ?�능 최적??
+4. **P3 (Low)**: 추�? UX 개선, ?�근?? 문서??
 
-이 마이그레이션 프로젝트를 완료하면, Tropical Downloader는 현대적이고 안정적이며 확장 가능한 Electron + Python 아키텍처를 갖춘 강력한 유튜브 다운로더로 거듭날 것입니다.
+??마이그레?�션 ?�로?�트�??�료?�면, Tropical Downloader???��??�이�??�정?�이�??�장 가?�한 Electron + Python ?�키?�처�?갖춘 강력???�튜�??�운로더�?거듭??것입?�다.
