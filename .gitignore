@@ -18,3 +18,11 @@ dist/
 # User data & logs
 *.log
 .tropical_downloader/
+
+# Node / Electron
+node_modules/
+package-lock.json
+.electron-builder/
+
+# Pytest cache
+.pytest_cache/

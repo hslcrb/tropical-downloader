@@ -1,0 +1,53 @@
+{
+  "name": "tropical-downloader",
+  "version": "2.0.0",
+  "description": "Tropical Downloader - Freedom Information Archive. Electron + Python FastAPI.",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "install-backend": "cd backend && pip install -r requirements.txt",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "youtube",
+    "downloader",
+    "archive",
+    "freedom",
+    "tropical"
+  ],
+  "author": "Tropical Downloader Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^43.4.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.tropical.downloader",
+    "productName": "Tropical Downloader",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**",
+      "src/**",
+      "backend/**",
+      "!backend/__pycache__/**",
+      "!**/.git/**"
+    ],
+    "win": {
+      "icon": "tropical-downloader.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "icon": "tropical-downloader.png",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  }
+}
