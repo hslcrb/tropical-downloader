@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tropical Downloader 🌴 — 정보의 자유를 보전하다</title>
+  <meta name="description" content="Tropical Downloader: YouTube 채널 및 미디어 완전 백업 도구. 정보의 자유 보전 프로젝트." />
+  <link rel="stylesheet" href="styles/frutiger_aero.css" />
+</head>
+<body>
+
+<div id="app">
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <div class="header">
+    <div class="logo">
+      <span class="logo-icon">🌴</span>
+      <span class="logo-text">Tropical Downloader</span>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="backend-status" id="backendStatus">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">백엔드 시작 중...</span>
+    </div>
+  </div>
+
+  <!-- ── Tab Navigation ─────────────────────────────────────────────────── -->
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="quick">⚡ 빠른 다운로드</button>
+    <button class="tab-btn" data-tab="inspector">🔍 포맷 분석</button>
+    <button class="tab-btn" data-tab="playlist">📋 플레이리스트</button>
+    <button class="tab-btn" data-tab="channel">🗄 채널 백업</button>
+    <button class="tab-btn" data-tab="queue">📥 다운로드 큐</button>
+    <button class="tab-btn" data-tab="history">📜 기록</button>
+    <button class="tab-btn" data-tab="player">▶ 플레이어</button>
+    <button class="tab-btn" data-tab="advanced">⚙ 고급 옵션</button>
+    <button class="tab-btn" data-tab="settings">🔧 설정</button>
+  </div>
+
+  <!-- ── Tab Content ────────────────────────────────────────────────────── -->
+  <div class="tab-content">
+
+    <!-- Quick Download Tab -->
+    <div id="tab-quick" class="tab-pane active"></div>
+
+    <!-- Format Inspector Tab -->
+    <div id="tab-inspector" class="tab-pane"></div>
+
+    <!-- Playlist Tab -->
+    <div id="tab-playlist" class="tab-pane"></div>
+
+    <!-- Channel Backup Tab -->
+    <div id="tab-channel" class="tab-pane"></div>
+
+    <!-- Queue Tab -->
+    <div id="tab-queue" class="tab-pane"></div>
+
+    <!-- History Tab -->
+    <div id="tab-history" class="tab-pane"></div>
+
+    <!-- Player Tab -->
+    <div id="tab-player" class="tab-pane"></div>
+
+    <!-- Advanced Tab -->
+    <div id="tab-advanced" class="tab-pane"></div>
+
+    <!-- Settings Tab -->
+    <div id="tab-settings" class="tab-pane"></div>
+
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="app.js" type="module"></script>
+
+</body>
+</html>
