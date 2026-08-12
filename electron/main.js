@@ -113,25 +113,39 @@ function createWindow() {
     height: 800,
     minWidth: 900,
     minHeight: 600,
-    titleBarStyle: "hidden",
+    show: true,
     backgroundColor: "#0a1a2e",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
+      webSecurity: false, // Allow local ES module loading via file://
     },
     icon: path.join(__dirname, "..", "tropical-downloader.ico"),
   });
 
   const indexPath = path.join(__dirname, "..", "src", "index.html");
-  mainWindow.loadFile(indexPath);
+  console.log(`[Window] Loading file: ${indexPath}`);
+
+  mainWindow.loadFile(indexPath).catch((err) => {
+    console.error("[Window] Failed to load index.html:", err);
+  });
+
+  mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
+    console.error(`[Window] Load failed (${errorCode}): ${errorDescription}`);
+  });
+
+  mainWindow.webContents.on("console-message", (event, level, message, line, sourceId) => {
+    console.log(`[Renderer Console] ${message} (${sourceId}:${line})`);
+  });
 
   if (IS_DEV) {
     mainWindow.webContents.openDevTools();
   }
 
   mainWindow.on("closed", () => {
+    console.log("[Window] Main window closed");
     mainWindow = null;
   });
 }
