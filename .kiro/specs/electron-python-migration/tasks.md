@@ -4,8 +4,8 @@
 
 ### 1.1 Project Setup and Structure
 
-- [~] 1.1.1 FastAPI 프로젝트 구조 생성 (main.py, services/, models/, core/, tests/)
-- [~] 1.1.2 requirements.txt 작성 (FastAPI, Uvicorn, yt-dlp, Pydantic, python-socketio)
+- [x] 1.1.1 FastAPI 프로젝트 구조 생성 (main.py, services/, models/, core/, tests/)
+- [x] 1.1.2 requirements.txt 작성 (FastAPI, Uvicorn, yt-dlp, Pydantic, python-socketio)
 - [~] 1.1.3 Python 가상 환경 설정 및 의존성 설치
 - [~] 1.1.4 .env 파일 및 환경 변수 설정
 - [~] 1.1.5 로깅 시스템 설정 (RotatingFileHandler)
